@@ -1,0 +1,3774 @@
+m4trace:/usr/share/aclocal-1.16/amversion.m4:14: -1- AC_DEFUN([AM_AUTOMAKE_VERSION], [am__api_version='1.16'
+dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
+dnl require some minimum version.  Point them to the right macro.
+m4_if([$1], [1.16.5], [],
+      [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
+])
+m4trace:/usr/share/aclocal-1.16/amversion.m4:33: -1- AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION], [AM_AUTOMAKE_VERSION([1.16.5])dnl
+m4_ifndef([AC_AUTOCONF_VERSION],
+  [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+_AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
+m4trace:/usr/share/aclocal-1.16/auxdir.m4:47: -1- AC_DEFUN([AM_AUX_DIR_EXPAND], [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+# Expand $ac_aux_dir to an absolute path.
+am_aux_dir=`cd "$ac_aux_dir" && pwd`
+])
+m4trace:/usr/share/aclocal-1.16/cond.m4:12: -1- AC_DEFUN([AM_CONDITIONAL], [AC_PREREQ([2.52])dnl
+ m4_if([$1], [TRUE],  [AC_FATAL([$0: invalid condition: $1])],
+       [$1], [FALSE], [AC_FATAL([$0: invalid condition: $1])])dnl
+AC_SUBST([$1_TRUE])dnl
+AC_SUBST([$1_FALSE])dnl
+_AM_SUBST_NOTMAKE([$1_TRUE])dnl
+_AM_SUBST_NOTMAKE([$1_FALSE])dnl
+m4_define([_AM_COND_VALUE_$1], [$2])dnl
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi
+AC_CONFIG_COMMANDS_PRE(
+[if test -z "${$1_TRUE}" && test -z "${$1_FALSE}"; then
+  AC_MSG_ERROR([[conditional "$1" was never defined.
+Usually this means the macro was only invoked conditionally.]])
+fi])])
+m4trace:/usr/share/aclocal-1.16/depend.m4:26: -1- AC_DEFUN([_AM_DEPENDENCIES], [AC_REQUIRE([AM_SET_DEPDIR])dnl
+AC_REQUIRE([AM_OUTPUT_DEPENDENCY_COMMANDS])dnl
+AC_REQUIRE([AM_MAKE_INCLUDE])dnl
+AC_REQUIRE([AM_DEP_TRACK])dnl
+
+m4_if([$1], [CC],   [depcc="$CC"   am_compiler_list=],
+      [$1], [CXX],  [depcc="$CXX"  am_compiler_list=],
+      [$1], [OBJC], [depcc="$OBJC" am_compiler_list='gcc3 gcc'],
+      [$1], [OBJCXX], [depcc="$OBJCXX" am_compiler_list='gcc3 gcc'],
+      [$1], [UPC],  [depcc="$UPC"  am_compiler_list=],
+      [$1], [GCJ],  [depcc="$GCJ"  am_compiler_list='gcc3 gcc'],
+                    [depcc="$$1"   am_compiler_list=])
+
+AC_CACHE_CHECK([dependency style of $depcc],
+               [am_cv_$1_dependencies_compiler_type],
+[if test -z "$AMDEP_TRUE" && test -f "$am_depcomp"; then
+  # We make a subdir and do the tests there.  Otherwise we can end up
+  # making bogus files that we don't know about and never remove.  For
+  # instance it was reported that on HP-UX the gcc test will end up
+  # making a dummy file named 'D' -- because '-MD' means "put the output
+  # in D".
+  rm -rf conftest.dir
+  mkdir conftest.dir
+  # Copy depcomp to subdir because otherwise we won't find it if we're
+  # using a relative directory.
+  cp "$am_depcomp" conftest.dir
+  cd conftest.dir
+  # We will build objects and dependencies in a subdirectory because
+  # it helps to detect inapplicable dependency modes.  For instance
+  # both Tru64's cc and ICC support -MD to output dependencies as a
+  # side effect of compilation, but ICC will put the dependencies in
+  # the current directory while Tru64 will put them in the object
+  # directory.
+  mkdir sub
+
+  am_cv_$1_dependencies_compiler_type=none
+  if test "$am_compiler_list" = ""; then
+     am_compiler_list=`sed -n ['s/^#*\([a-zA-Z0-9]*\))$/\1/p'] < ./depcomp`
+  fi
+  am__universal=false
+  m4_case([$1], [CC],
+    [case " $depcc " in #(
+     *\ -arch\ *\ -arch\ *) am__universal=true ;;
+     esac],
+    [CXX],
+    [case " $depcc " in #(
+     *\ -arch\ *\ -arch\ *) am__universal=true ;;
+     esac])
+
+  for depmode in $am_compiler_list; do
+    # Setup a source with many dependencies, because some compilers
+    # like to wrap large dependency lists on column 80 (with \), and
+    # we should not choose a depcomp mode which is confused by this.
+    #
+    # We need to recreate these files for each test, as the compiler may
+    # overwrite some of them when testing with obscure command lines.
+    # This happens at least with the AIX C compiler.
+    : > sub/conftest.c
+    for i in 1 2 3 4 5 6; do
+      echo '#include "conftst'$i'.h"' >> sub/conftest.c
+      # Using ": > sub/conftst$i.h" creates only sub/conftst1.h with
+      # Solaris 10 /bin/sh.
+      echo '/* dummy */' > sub/conftst$i.h
+    done
+    echo "${am__include} ${am__quote}sub/conftest.Po${am__quote}" > confmf
+
+    # We check with '-c' and '-o' for the sake of the "dashmstdout"
+    # mode.  It turns out that the SunPro C++ compiler does not properly
+    # handle '-M -o', and we need to detect this.  Also, some Intel
+    # versions had trouble with output in subdirs.
+    am__obj=sub/conftest.${OBJEXT-o}
+    am__minus_obj="-o $am__obj"
+    case $depmode in
+    gcc)
+      # This depmode causes a compiler race in universal mode.
+      test "$am__universal" = false || continue
+      ;;
+    nosideeffect)
+      # After this tag, mechanisms are not by side-effect, so they'll
+      # only be used when explicitly requested.
+      if test "x$enable_dependency_tracking" = xyes; then
+	continue
+      else
+	break
+      fi
+      ;;
+    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
+      # This compiler won't grok '-c -o', but also, the minuso test has
+      # not run yet.  These depmodes are late enough in the game, and
+      # so weak that their functioning should not be impacted.
+      am__obj=conftest.${OBJEXT-o}
+      am__minus_obj=
+      ;;
+    none) break ;;
+    esac
+    if depmode=$depmode \
+       source=sub/conftest.c object=$am__obj \
+       depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
+       $SHELL ./depcomp $depcc -c $am__minus_obj sub/conftest.c \
+         >/dev/null 2>conftest.err &&
+       grep sub/conftst1.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep $am__obj sub/conftest.Po > /dev/null 2>&1 &&
+       ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
+      # icc doesn't choke on unknown options, it will just issue warnings
+      # or remarks (even with -Werror).  So we grep stderr for any message
+      # that says an option was ignored or not supported.
+      # When given -MP, icc 7.0 and 7.1 complain thusly:
+      #   icc: Command line warning: ignoring option '-M'; no argument required
+      # The diagnosis changed in icc 8.0:
+      #   icc: Command line remark: option '-MP' not supported
+      if (grep 'ignoring option' conftest.err ||
+          grep 'not supported' conftest.err) >/dev/null 2>&1; then :; else
+        am_cv_$1_dependencies_compiler_type=$depmode
+        break
+      fi
+    fi
+  done
+
+  cd ..
+  rm -rf conftest.dir
+else
+  am_cv_$1_dependencies_compiler_type=none
+fi
+])
+AC_SUBST([$1DEPMODE], [depmode=$am_cv_$1_dependencies_compiler_type])
+AM_CONDITIONAL([am__fastdep$1], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_$1_dependencies_compiler_type" = gcc3])
+])
+m4trace:/usr/share/aclocal-1.16/depend.m4:163: -1- AC_DEFUN([AM_SET_DEPDIR], [AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+AC_SUBST([DEPDIR], ["${am__leading_dot}deps"])dnl
+])
+m4trace:/usr/share/aclocal-1.16/depend.m4:171: -1- AC_DEFUN([AM_DEP_TRACK], [AC_ARG_ENABLE([dependency-tracking], [dnl
+AS_HELP_STRING(
+  [--enable-dependency-tracking],
+  [do not reject slow dependency extractors])
+AS_HELP_STRING(
+  [--disable-dependency-tracking],
+  [speeds up one-time build])])
+if test "x$enable_dependency_tracking" != xno; then
+  am_depcomp="$ac_aux_dir/depcomp"
+  AMDEPBACKSLASH='\'
+  am__nodep='_no'
+fi
+AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+AC_SUBST([AMDEPBACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AMDEPBACKSLASH])dnl
+AC_SUBST([am__nodep])dnl
+_AM_SUBST_NOTMAKE([am__nodep])dnl
+])
+m4trace:/usr/share/aclocal-1.16/depout.m4:11: -1- AC_DEFUN([_AM_OUTPUT_DEPENDENCY_COMMANDS], [{
+  # Older Autoconf quotes --file arguments for eval, but not when files
+  # are listed without --file.  Let's play safe and only enable the eval
+  # if we detect the quoting.
+  # TODO: see whether this extra hack can be removed once we start
+  # requiring Autoconf 2.70 or later.
+  AS_CASE([$CONFIG_FILES],
+          [*\'*], [eval set x "$CONFIG_FILES"],
+          [*], [set x $CONFIG_FILES])
+  shift
+  # Used to flag and report bootstrapping failures.
+  am_rc=0
+  for am_mf
+  do
+    # Strip MF so we end up with the name of the file.
+    am_mf=`AS_ECHO(["$am_mf"]) | sed -e 's/:.*$//'`
+    # Check whether this is an Automake generated Makefile which includes
+    # dependency-tracking related rules and includes.
+    # Grep'ing the whole file directly is not great: AIX grep has a line
+    # limit of 2048, but all sed's we know have understand at least 4000.
+    sed -n 's,^am--depfiles:.*,X,p' "$am_mf" | grep X >/dev/null 2>&1 \
+      || continue
+    am_dirpart=`AS_DIRNAME(["$am_mf"])`
+    am_filepart=`AS_BASENAME(["$am_mf"])`
+    AM_RUN_LOG([cd "$am_dirpart" \
+      && sed -e '/# am--include-marker/d' "$am_filepart" \
+        | $MAKE -f - am--depfiles]) || am_rc=$?
+  done
+  if test $am_rc -ne 0; then
+    AC_MSG_FAILURE([Something went wrong bootstrapping makefile fragments
+    for automatic dependency tracking.  If GNU make was not used, consider
+    re-running the configure script with MAKE="gmake" (or whatever is
+    necessary).  You can also try re-running configure with the
+    '--disable-dependency-tracking' option to at least be able to build
+    the package (albeit without support for automatic dependency tracking).])
+  fi
+  AS_UNSET([am_dirpart])
+  AS_UNSET([am_filepart])
+  AS_UNSET([am_mf])
+  AS_UNSET([am_rc])
+  rm -f conftest-deps.mk
+}
+])
+m4trace:/usr/share/aclocal-1.16/depout.m4:64: -1- AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS], [AC_CONFIG_COMMANDS([depfiles],
+     [test x"$AMDEP_TRUE" != x"" || _AM_OUTPUT_DEPENDENCY_COMMANDS],
+     [AMDEP_TRUE="$AMDEP_TRUE" MAKE="${MAKE-make}"])])
+m4trace:/usr/share/aclocal-1.16/init.m4:29: -1- AC_DEFUN([AM_INIT_AUTOMAKE], [AC_PREREQ([2.65])dnl
+m4_ifdef([_$0_ALREADY_INIT],
+  [m4_fatal([$0 expanded multiple times
+]m4_defn([_$0_ALREADY_INIT]))],
+  [m4_define([_$0_ALREADY_INIT], m4_expansion_stack)])dnl
+dnl Autoconf wants to disallow AM_ names.  We explicitly allow
+dnl the ones we care about.
+m4_pattern_allow([^AM_[A-Z]+FLAGS$])dnl
+AC_REQUIRE([AM_SET_CURRENT_AUTOMAKE_VERSION])dnl
+AC_REQUIRE([AC_PROG_INSTALL])dnl
+if test "`cd $srcdir && pwd`" != "`pwd`"; then
+  # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
+  # is not polluted with repeated "-I."
+  AC_SUBST([am__isrc], [' -I$(srcdir)'])_AM_SUBST_NOTMAKE([am__isrc])dnl
+  # test to see if srcdir already configured
+  if test -f $srcdir/config.status; then
+    AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+  fi
+fi
+
+# test whether we have cygpath
+if test -z "$CYGPATH_W"; then
+  if (cygpath --version) >/dev/null 2>/dev/null; then
+    CYGPATH_W='cygpath -w'
+  else
+    CYGPATH_W=echo
+  fi
+fi
+AC_SUBST([CYGPATH_W])
+
+# Define the identity of the package.
+dnl Distinguish between old-style and new-style calls.
+m4_ifval([$2],
+[AC_DIAGNOSE([obsolete],
+             [$0: two- and three-arguments forms are deprecated.])
+m4_ifval([$3], [_AM_SET_OPTION([no-define])])dnl
+ AC_SUBST([PACKAGE], [$1])dnl
+ AC_SUBST([VERSION], [$2])],
+[_AM_SET_OPTIONS([$1])dnl
+dnl Diagnose old-style AC_INIT with new-style AM_AUTOMAKE_INIT.
+m4_if(
+  m4_ifset([AC_PACKAGE_NAME], [ok]):m4_ifset([AC_PACKAGE_VERSION], [ok]),
+  [ok:ok],,
+  [m4_fatal([AC_INIT should be called with package and version arguments])])dnl
+ AC_SUBST([PACKAGE], ['AC_PACKAGE_TARNAME'])dnl
+ AC_SUBST([VERSION], ['AC_PACKAGE_VERSION'])])dnl
+
+_AM_IF_OPTION([no-define],,
+[AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE"], [Name of package])
+ AC_DEFINE_UNQUOTED([VERSION], ["$VERSION"], [Version number of package])])dnl
+
+# Some tools Automake needs.
+AC_REQUIRE([AM_SANITY_CHECK])dnl
+AC_REQUIRE([AC_ARG_PROGRAM])dnl
+AM_MISSING_PROG([ACLOCAL], [aclocal-${am__api_version}])
+AM_MISSING_PROG([AUTOCONF], [autoconf])
+AM_MISSING_PROG([AUTOMAKE], [automake-${am__api_version}])
+AM_MISSING_PROG([AUTOHEADER], [autoheader])
+AM_MISSING_PROG([MAKEINFO], [makeinfo])
+AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+AC_REQUIRE([AM_PROG_INSTALL_STRIP])dnl
+AC_REQUIRE([AC_PROG_MKDIR_P])dnl
+# For better backward compatibility.  To be removed once Automake 1.9.x
+# dies out for good.  For more background, see:
+# <https://lists.gnu.org/archive/html/automake/2012-07/msg00001.html>
+# <https://lists.gnu.org/archive/html/automake/2012-07/msg00014.html>
+AC_SUBST([mkdir_p], ['$(MKDIR_P)'])
+# We need awk for the "check" target (and possibly the TAP driver).  The
+# system "awk" is bad on some platforms.
+AC_REQUIRE([AC_PROG_AWK])dnl
+AC_REQUIRE([AC_PROG_MAKE_SET])dnl
+AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+_AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])],
+	      [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+			     [_AM_PROG_TAR([v7])])])
+_AM_IF_OPTION([no-dependencies],,
+[AC_PROVIDE_IFELSE([AC_PROG_CC],
+		  [_AM_DEPENDENCIES([CC])],
+		  [m4_define([AC_PROG_CC],
+			     m4_defn([AC_PROG_CC])[_AM_DEPENDENCIES([CC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+		  [_AM_DEPENDENCIES([CXX])],
+		  [m4_define([AC_PROG_CXX],
+			     m4_defn([AC_PROG_CXX])[_AM_DEPENDENCIES([CXX])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+		  [_AM_DEPENDENCIES([OBJC])],
+		  [m4_define([AC_PROG_OBJC],
+			     m4_defn([AC_PROG_OBJC])[_AM_DEPENDENCIES([OBJC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJCXX],
+		  [_AM_DEPENDENCIES([OBJCXX])],
+		  [m4_define([AC_PROG_OBJCXX],
+			     m4_defn([AC_PROG_OBJCXX])[_AM_DEPENDENCIES([OBJCXX])])])dnl
+])
+# Variables for tags utilities; see am/tags.am
+if test -z "$CTAGS"; then
+  CTAGS=ctags
+fi
+AC_SUBST([CTAGS])
+if test -z "$ETAGS"; then
+  ETAGS=etags
+fi
+AC_SUBST([ETAGS])
+if test -z "$CSCOPE"; then
+  CSCOPE=cscope
+fi
+AC_SUBST([CSCOPE])
+
+AC_REQUIRE([AM_SILENT_RULES])dnl
+dnl The testsuite driver may need to know about EXEEXT, so add the
+dnl 'am__EXEEXT' conditional if _AM_COMPILER_EXEEXT was seen.  This
+dnl macro is hooked onto _AC_COMPILER_EXEEXT early, see below.
+AC_CONFIG_COMMANDS_PRE(dnl
+[m4_provide_if([_AM_COMPILER_EXEEXT],
+  [AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])])])dnl
+
+# POSIX will say in a future version that running "rm -f" with no argument
+# is OK; and we want to be able to make that assumption in our Makefile
+# recipes.  So use an aggressive probe to check that the usage we want is
+# actually supported "in the wild" to an acceptable degree.
+# See automake bug#10828.
+# To make any issue more visible, cause the running configure to be aborted
+# by default if the 'rm' program in use doesn't match our expectations; the
+# user can still override this though.
+if rm -f && rm -fr && rm -rf; then : OK; else
+  cat >&2 <<'END'
+Oops!
+
+Your 'rm' program seems unable to run without file operands specified
+on the command line, even when the '-f' option is present.  This is contrary
+to the behaviour of most rm programs out there, and not conforming with
+the upcoming POSIX standard: <http://austingroupbugs.net/view.php?id=542>
+
+Please tell bug-automake@gnu.org about your system, including the value
+of your $PATH and any error possibly output before this message.  This
+can help us improve future automake versions.
+
+END
+  if test x"$ACCEPT_INFERIOR_RM_PROGRAM" = x"yes"; then
+    echo 'Configuration will proceed anyway, since you have set the' >&2
+    echo 'ACCEPT_INFERIOR_RM_PROGRAM variable to "yes"' >&2
+    echo >&2
+  else
+    cat >&2 <<'END'
+Aborting the configuration process, to ensure you take notice of the issue.
+
+You can download and install GNU coreutils to get an 'rm' implementation
+that behaves properly: <https://www.gnu.org/software/coreutils/>.
+
+If you want to complete the configuration process using your problematic
+'rm' anyway, export the environment variable ACCEPT_INFERIOR_RM_PROGRAM
+to "yes", and re-run configure.
+
+END
+    AC_MSG_ERROR([Your 'rm' program is bad, sorry.])
+  fi
+fi
+dnl The trailing newline in this macro's definition is deliberate, for
+dnl backward compatibility and to allow trailing 'dnl'-style comments
+dnl after the AM_INIT_AUTOMAKE invocation. See automake bug#16841.
+])
+m4trace:/usr/share/aclocal-1.16/init.m4:204: -1- AC_DEFUN([_AC_AM_CONFIG_HEADER_HOOK], [# Compute $1's index in $config_headers.
+_am_arg=$1
+_am_stamp_count=1
+for _am_header in $config_headers :; do
+  case $_am_header in
+    $_am_arg | $_am_arg:* )
+      break ;;
+    * )
+      _am_stamp_count=`expr $_am_stamp_count + 1` ;;
+  esac
+done
+echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count])
+m4trace:/usr/share/aclocal-1.16/install-sh.m4:11: -1- AC_DEFUN([AM_PROG_INSTALL_SH], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+if test x"${install_sh+set}" != xset; then
+  case $am_aux_dir in
+  *\ * | *\	*)
+    install_sh="\${SHELL} '$am_aux_dir/install-sh'" ;;
+  *)
+    install_sh="\${SHELL} $am_aux_dir/install-sh"
+  esac
+fi
+AC_SUBST([install_sh])])
+m4trace:/usr/share/aclocal-1.16/lead-dot.m4:10: -1- AC_DEFUN([AM_SET_LEADING_DOT], [rm -rf .tst 2>/dev/null
+mkdir .tst 2>/dev/null
+if test -d .tst; then
+  am__leading_dot=.
+else
+  am__leading_dot=_
+fi
+rmdir .tst 2>/dev/null
+AC_SUBST([am__leading_dot])])
+m4trace:/usr/share/aclocal-1.16/maintainer.m4:16: -1- AC_DEFUN([AM_MAINTAINER_MODE], [m4_case(m4_default([$1], [disable]),
+       [enable], [m4_define([am_maintainer_other], [disable])],
+       [disable], [m4_define([am_maintainer_other], [enable])],
+       [m4_define([am_maintainer_other], [enable])
+        m4_warn([syntax], [unexpected argument to AM@&t@_MAINTAINER_MODE: $1])])
+AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
+  dnl maintainer-mode's default is 'disable' unless 'enable' is passed
+  AC_ARG_ENABLE([maintainer-mode],
+    [AS_HELP_STRING([--]am_maintainer_other[-maintainer-mode],
+      am_maintainer_other[ make rules and dependencies not useful
+      (and sometimes confusing) to the casual installer])],
+    [USE_MAINTAINER_MODE=$enableval],
+    [USE_MAINTAINER_MODE=]m4_if(am_maintainer_other, [enable], [no], [yes]))
+  AC_MSG_RESULT([$USE_MAINTAINER_MODE])
+  AM_CONDITIONAL([MAINTAINER_MODE], [test $USE_MAINTAINER_MODE = yes])
+  MAINT=$MAINTAINER_MODE_TRUE
+  AC_SUBST([MAINT])dnl
+
+])
+m4trace:/usr/share/aclocal-1.16/make.m4:13: -1- AC_DEFUN([AM_MAKE_INCLUDE], [AC_MSG_CHECKING([whether ${MAKE-make} supports the include directive])
+cat > confinc.mk << 'END'
+am__doit:
+	@echo this is the am__doit target >confinc.out
+.PHONY: am__doit
+END
+am__include="#"
+am__quote=
+# BSD make does it like this.
+echo '.include "confinc.mk" # ignored' > confmf.BSD
+# Other make implementations (GNU, Solaris 10, AIX) do it like this.
+echo 'include confinc.mk # ignored' > confmf.GNU
+_am_result=no
+for s in GNU BSD; do
+  AM_RUN_LOG([${MAKE-make} -f confmf.$s && cat confinc.out])
+  AS_CASE([$?:`cat confinc.out 2>/dev/null`],
+      ['0:this is the am__doit target'],
+      [AS_CASE([$s],
+          [BSD], [am__include='.include' am__quote='"'],
+          [am__include='include' am__quote=''])])
+  if test "$am__include" != "#"; then
+    _am_result="yes ($s style)"
+    break
+  fi
+done
+rm -f confinc.* confmf.*
+AC_MSG_RESULT([${_am_result}])
+AC_SUBST([am__include])])
+m4trace:/usr/share/aclocal-1.16/make.m4:42: -1- m4_pattern_allow([^am__quote$])
+m4trace:/usr/share/aclocal-1.16/missing.m4:11: -1- AC_DEFUN([AM_MISSING_PROG], [AC_REQUIRE([AM_MISSING_HAS_RUN])
+$1=${$1-"${am_missing_run}$2"}
+AC_SUBST($1)])
+m4trace:/usr/share/aclocal-1.16/missing.m4:20: -1- AC_DEFUN([AM_MISSING_HAS_RUN], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([missing])dnl
+if test x"${MISSING+set}" != xset; then
+  MISSING="\${SHELL} '$am_aux_dir/missing'"
+fi
+# Use eval to expand $SHELL
+if eval "$MISSING --is-lightweight"; then
+  am_missing_run="$MISSING "
+else
+  am_missing_run=
+  AC_MSG_WARN(['missing' script is too old or missing])
+fi
+])
+m4trace:/usr/share/aclocal-1.16/options.m4:11: -1- AC_DEFUN([_AM_MANGLE_OPTION], [[_AM_OPTION_]m4_bpatsubst($1, [[^a-zA-Z0-9_]], [_])])
+m4trace:/usr/share/aclocal-1.16/options.m4:17: -1- AC_DEFUN([_AM_SET_OPTION], [m4_define(_AM_MANGLE_OPTION([$1]), [1])])
+m4trace:/usr/share/aclocal-1.16/options.m4:23: -1- AC_DEFUN([_AM_SET_OPTIONS], [m4_foreach_w([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])])
+m4trace:/usr/share/aclocal-1.16/options.m4:29: -1- AC_DEFUN([_AM_IF_OPTION], [m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])])
+m4trace:/usr/share/aclocal-1.16/prog-cc-c-o.m4:12: -1- AC_DEFUN([_AM_PROG_CC_C_O], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([compile])dnl
+AC_LANG_PUSH([C])dnl
+AC_CACHE_CHECK(
+  [whether $CC understands -c and -o together],
+  [am_cv_prog_cc_c_o],
+  [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
+  # Make sure it works both with $CC and with simple cc.
+  # Following AC_PROG_CC_C_O, we do the test twice because some
+  # compilers refuse to overwrite an existing .o file with -o,
+  # though they will create one.
+  am_cv_prog_cc_c_o=yes
+  for am_i in 1 2; do
+    if AM_RUN_LOG([$CC -c conftest.$ac_ext -o conftest2.$ac_objext]) \
+         && test -f conftest2.$ac_objext; then
+      : OK
+    else
+      am_cv_prog_cc_c_o=no
+      break
+    fi
+  done
+  rm -f core conftest*
+  unset am_i])
+if test "$am_cv_prog_cc_c_o" != yes; then
+   # Losing compiler, so override with the script.
+   # FIXME: It is wrong to rewrite CC.
+   # But if we don't then we get into trouble of one sort or another.
+   # A longer-term fix would be to have automake use am__CC in this case,
+   # and then we could set am__CC="\$(top_srcdir)/compile \$(CC)"
+   CC="$am_aux_dir/compile $CC"
+fi
+AC_LANG_POP([C])])
+m4trace:/usr/share/aclocal-1.16/prog-cc-c-o.m4:47: -1- AC_DEFUN_ONCE([AM_PROG_CC_C_O], [AC_REQUIRE([AC_PROG_CC])])
+m4trace:/usr/share/aclocal-1.16/runlog.m4:12: -1- AC_DEFUN([AM_RUN_LOG], [{ echo "$as_me:$LINENO: $1" >&AS_MESSAGE_LOG_FD
+   ($1) >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+   (exit $ac_status); }])
+m4trace:/usr/share/aclocal-1.16/sanity.m4:11: -1- AC_DEFUN([AM_SANITY_CHECK], [AC_MSG_CHECKING([whether build environment is sane])
+# Reject unsafe characters in $srcdir or the absolute working directory
+# name.  Accept space and tab only in the latter.
+am_lf='
+'
+case `pwd` in
+  *[[\\\"\#\$\&\'\`$am_lf]]*)
+    AC_MSG_ERROR([unsafe absolute working directory name]);;
+esac
+case $srcdir in
+  *[[\\\"\#\$\&\'\`$am_lf\ \	]]*)
+    AC_MSG_ERROR([unsafe srcdir value: '$srcdir']);;
+esac
+
+# Do 'set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   am_has_slept=no
+   for am_try in 1 2; do
+     echo "timestamp, slept: $am_has_slept" > conftest.file
+     set X `ls -Lt "$srcdir/configure" conftest.file 2> /dev/null`
+     if test "$[*]" = "X"; then
+	# -L didn't work.
+	set X `ls -t "$srcdir/configure" conftest.file`
+     fi
+     if test "$[*]" != "X $srcdir/configure conftest.file" \
+	&& test "$[*]" != "X conftest.file $srcdir/configure"; then
+
+	# If neither matched, then we have a broken ls.  This can happen
+	# if, for instance, CONFIG_SHELL is bash and it inherits a
+	# broken ls alias from the environment.  This has actually
+	# happened.  Such a system could not be considered "sane".
+	AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
+  alias in your environment])
+     fi
+     if test "$[2]" = conftest.file || test $am_try -eq 2; then
+       break
+     fi
+     # Just in case.
+     sleep 1
+     am_has_slept=yes
+   done
+   test "$[2]" = conftest.file
+   )
+then
+   # Ok.
+   :
+else
+   AC_MSG_ERROR([newly created file is older than distributed files!
+Check your system clock])
+fi
+AC_MSG_RESULT([yes])
+# If we didn't sleep, we still need to ensure time stamps of config.status and
+# generated files are strictly newer.
+am_sleep_pid=
+if grep 'slept: no' conftest.file >/dev/null 2>&1; then
+  ( sleep 1 ) &
+  am_sleep_pid=$!
+fi
+AC_CONFIG_COMMANDS_PRE(
+  [AC_MSG_CHECKING([that generated files are newer than configure])
+   if test -n "$am_sleep_pid"; then
+     # Hide warnings about reused PIDs.
+     wait $am_sleep_pid 2>/dev/null
+   fi
+   AC_MSG_RESULT([done])])
+rm -f conftest.file
+])
+m4trace:/usr/share/aclocal-1.16/silent.m4:12: -1- AC_DEFUN([AM_SILENT_RULES], [AC_ARG_ENABLE([silent-rules], [dnl
+AS_HELP_STRING(
+  [--enable-silent-rules],
+  [less verbose build output (undo: "make V=1")])
+AS_HELP_STRING(
+  [--disable-silent-rules],
+  [verbose build output (undo: "make V=0")])dnl
+])
+case $enable_silent_rules in @%:@ (((
+  yes) AM_DEFAULT_VERBOSITY=0;;
+   no) AM_DEFAULT_VERBOSITY=1;;
+    *) AM_DEFAULT_VERBOSITY=m4_if([$1], [yes], [0], [1]);;
+esac
+dnl
+dnl A few 'make' implementations (e.g., NonStop OS and NextStep)
+dnl do not support nested variable expansions.
+dnl See automake bug#9928 and bug#10237.
+am_make=${MAKE-make}
+AC_CACHE_CHECK([whether $am_make supports nested variables],
+   [am_cv_make_support_nested_variables],
+   [if AS_ECHO([['TRUE=$(BAR$(V))
+BAR0=false
+BAR1=true
+V=1
+am__doit:
+	@$(TRUE)
+.PHONY: am__doit']]) | $am_make -f - >/dev/null 2>&1; then
+  am_cv_make_support_nested_variables=yes
+else
+  am_cv_make_support_nested_variables=no
+fi])
+if test $am_cv_make_support_nested_variables = yes; then
+  dnl Using '$V' instead of '$(V)' breaks IRIX make.
+  AM_V='$(V)'
+  AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
+else
+  AM_V=$AM_DEFAULT_VERBOSITY
+  AM_DEFAULT_V=$AM_DEFAULT_VERBOSITY
+fi
+AC_SUBST([AM_V])dnl
+AM_SUBST_NOTMAKE([AM_V])dnl
+AC_SUBST([AM_DEFAULT_V])dnl
+AM_SUBST_NOTMAKE([AM_DEFAULT_V])dnl
+AC_SUBST([AM_DEFAULT_VERBOSITY])dnl
+AM_BACKSLASH='\'
+AC_SUBST([AM_BACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AM_BACKSLASH])dnl
+])
+m4trace:/usr/share/aclocal-1.16/strip.m4:17: -1- AC_DEFUN([AM_PROG_INSTALL_STRIP], [AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+# Installed binaries are usually stripped using 'strip' when the user
+# run "make install-strip".  However 'strip' might not be the right
+# tool to use in cross-compilation environments, therefore Automake
+# will honor the 'STRIP' environment variable to overrule this program.
+dnl Don't test for $cross_compiling = yes, because it might be 'maybe'.
+if test "$cross_compiling" != no; then
+  AC_CHECK_TOOL([STRIP], [strip], :)
+fi
+INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
+AC_SUBST([INSTALL_STRIP_PROGRAM])])
+m4trace:/usr/share/aclocal-1.16/substnot.m4:12: -1- AC_DEFUN([_AM_SUBST_NOTMAKE])
+m4trace:/usr/share/aclocal-1.16/substnot.m4:17: -1- AC_DEFUN([AM_SUBST_NOTMAKE], [_AM_SUBST_NOTMAKE($@)])
+m4trace:/usr/share/aclocal-1.16/tar.m4:23: -1- AC_DEFUN([_AM_PROG_TAR], [# Always define AMTAR for backward compatibility.  Yes, it's still used
+# in the wild :-(  We should find a proper way to deprecate it ...
+AC_SUBST([AMTAR], ['$${TAR-tar}'])
+
+# We'll loop over all known methods to create a tar archive until one works.
+_am_tools='gnutar m4_if([$1], [ustar], [plaintar]) pax cpio none'
+
+m4_if([$1], [v7],
+  [am__tar='$${TAR-tar} chof - "$$tardir"' am__untar='$${TAR-tar} xf -'],
+
+  [m4_case([$1],
+    [ustar],
+     [# The POSIX 1988 'ustar' format is defined with fixed-size fields.
+      # There is notably a 21 bits limit for the UID and the GID.  In fact,
+      # the 'pax' utility can hang on bigger UID/GID (see automake bug#8343
+      # and bug#13588).
+      am_max_uid=2097151 # 2^21 - 1
+      am_max_gid=$am_max_uid
+      # The $UID and $GID variables are not portable, so we need to resort
+      # to the POSIX-mandated id(1) utility.  Errors in the 'id' calls
+      # below are definitely unexpected, so allow the users to see them
+      # (that is, avoid stderr redirection).
+      am_uid=`id -u || echo unknown`
+      am_gid=`id -g || echo unknown`
+      AC_MSG_CHECKING([whether UID '$am_uid' is supported by ustar format])
+      if test $am_uid -le $am_max_uid; then
+         AC_MSG_RESULT([yes])
+      else
+         AC_MSG_RESULT([no])
+         _am_tools=none
+      fi
+      AC_MSG_CHECKING([whether GID '$am_gid' is supported by ustar format])
+      if test $am_gid -le $am_max_gid; then
+         AC_MSG_RESULT([yes])
+      else
+        AC_MSG_RESULT([no])
+        _am_tools=none
+      fi],
+
+  [pax],
+    [],
+
+  [m4_fatal([Unknown tar format])])
+
+  AC_MSG_CHECKING([how to create a $1 tar archive])
+
+  # Go ahead even if we have the value already cached.  We do so because we
+  # need to set the values for the 'am__tar' and 'am__untar' variables.
+  _am_tools=${am_cv_prog_tar_$1-$_am_tools}
+
+  for _am_tool in $_am_tools; do
+    case $_am_tool in
+    gnutar)
+      for _am_tar in tar gnutar gtar; do
+        AM_RUN_LOG([$_am_tar --version]) && break
+      done
+      am__tar="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$$tardir"'
+      am__tar_="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$tardir"'
+      am__untar="$_am_tar -xf -"
+      ;;
+    plaintar)
+      # Must skip GNU tar: if it does not support --format= it doesn't create
+      # ustar tarball either.
+      (tar --version) >/dev/null 2>&1 && continue
+      am__tar='tar chf - "$$tardir"'
+      am__tar_='tar chf - "$tardir"'
+      am__untar='tar xf -'
+      ;;
+    pax)
+      am__tar='pax -L -x $1 -w "$$tardir"'
+      am__tar_='pax -L -x $1 -w "$tardir"'
+      am__untar='pax -r'
+      ;;
+    cpio)
+      am__tar='find "$$tardir" -print | cpio -o -H $1 -L'
+      am__tar_='find "$tardir" -print | cpio -o -H $1 -L'
+      am__untar='cpio -i -H $1 -d'
+      ;;
+    none)
+      am__tar=false
+      am__tar_=false
+      am__untar=false
+      ;;
+    esac
+
+    # If the value was cached, stop now.  We just wanted to have am__tar
+    # and am__untar set.
+    test -n "${am_cv_prog_tar_$1}" && break
+
+    # tar/untar a dummy directory, and stop if the command works.
+    rm -rf conftest.dir
+    mkdir conftest.dir
+    echo GrepMe > conftest.dir/file
+    AM_RUN_LOG([tardir=conftest.dir && eval $am__tar_ >conftest.tar])
+    rm -rf conftest.dir
+    if test -s conftest.tar; then
+      AM_RUN_LOG([$am__untar <conftest.tar])
+      AM_RUN_LOG([cat conftest.dir/file])
+      grep GrepMe conftest.dir/file >/dev/null 2>&1 && break
+    fi
+  done
+  rm -rf conftest.dir
+
+  AC_CACHE_VAL([am_cv_prog_tar_$1], [am_cv_prog_tar_$1=$_am_tool])
+  AC_MSG_RESULT([$am_cv_prog_tar_$1])])
+
+AC_SUBST([am__tar])
+AC_SUBST([am__untar])
+])
+m4trace:m4/acinclude.m4:20: -1- AC_DEFUN([GCONFIG_FN_CHECK_CXX], [
+	AC_REQUIRE([GCONFIG_FN_CXX_ALIGNMENT])
+	AC_REQUIRE([GCONFIG_FN_CXX_MAKE_UNIQUE])
+	AC_REQUIRE([GCONFIG_FN_CXX_STD_THREAD])
+])
+m4trace:m4/acinclude.m4:30: -1- AC_DEFUN([GCONFIG_FN_CHECK_FUNCTIONS], [
+	AC_REQUIRE([GCONFIG_FN_GETPWNAM])
+	AC_REQUIRE([GCONFIG_FN_GETPWNAM_R])
+	AC_REQUIRE([GCONFIG_FN_GETGRNAM])
+	AC_REQUIRE([GCONFIG_FN_GETGRNAM_R])
+	AC_REQUIRE([GCONFIG_FN_GETTEXT])
+	AC_REQUIRE([GCONFIG_FN_GMTIME_R])
+	AC_REQUIRE([GCONFIG_FN_GMTIME_S])
+	AC_REQUIRE([GCONFIG_FN_LOCALTIME_R])
+	AC_REQUIRE([GCONFIG_FN_LOCALTIME_S])
+	AC_REQUIRE([GCONFIG_FN_STRNCPY_S])
+	AC_REQUIRE([GCONFIG_FN_GETENV_S])
+	AC_REQUIRE([GCONFIG_FN_PUTENV_S])
+	AC_REQUIRE([GCONFIG_FN_FSOPEN])
+	AC_REQUIRE([GCONFIG_FN_SOPEN])
+	AC_REQUIRE([GCONFIG_FN_SOPEN_S])
+	AC_REQUIRE([GCONFIG_FN_EXTENDED_OPEN])
+	AC_REQUIRE([GCONFIG_FN_READLINK])
+	AC_REQUIRE([GCONFIG_FN_PROC_PIDPATH])
+	AC_REQUIRE([GCONFIG_FN_SETPGRP_BSD])
+	AC_REQUIRE([GCONFIG_FN_SETGROUPS])
+	AC_REQUIRE([GCONFIG_FN_EXECVPE])
+	AC_REQUIRE([GCONFIG_FN_SIGPROCMASK])
+	AC_REQUIRE([GCONFIG_FN_PTHREAD_SIGMASK])
+	AC_REQUIRE([GCONFIG_FN_WINDOWS_CREATE_WAITABLE_TIMER_EX])
+	AC_REQUIRE([GCONFIG_FN_WINDOWS_CREATE_EVENT_EX])
+	AC_REQUIRE([GCONFIG_FN_WINDOWS_INIT_COMMON_CONTROLS_EX])
+])
+m4trace:m4/acinclude.m4:63: -1- AC_DEFUN([GCONFIG_FN_CHECK_HEADERS], [
+	AC_CHECK_HEADER([sys/types.h],
+		AC_DEFINE([GCONFIG_HAVE_SYS_TYPES_H],1,[Define true if sys/types.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_SYS_TYPES_H],0,[Define true if sys/types.h is available]))
+	AC_CHECK_HEADER([sys/stat.h],
+		AC_DEFINE([GCONFIG_HAVE_SYS_STAT_H],1,[Define true if sys/stat.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_SYS_STAT_H],0,[Define true if sys/stat.h is available]))
+	AC_CHECK_HEADER([sys/wait.h],
+		AC_DEFINE([GCONFIG_HAVE_SYS_WAIT_H],1,[Define true if sys/wait.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_SYS_WAIT_H],0,[Define true if sys/wait.h is available]))
+	AC_CHECK_HEADER([sys/mman.h],
+		AC_DEFINE([GCONFIG_HAVE_SYS_MMAN_H],1,[Define true if sys/mman.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_SYS_MMAN_H],0,[Define true if sys/mman.h is available]))
+	AC_CHECK_HEADER([sys/select.h],
+		AC_DEFINE([GCONFIG_HAVE_SYS_SELECT_H],1,[Define true if sys/select.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_SYS_SELECT_H],0,[Define true if sys/select.h is available]))
+	AC_CHECK_HEADER([sys/socket.h],
+		AC_DEFINE([GCONFIG_HAVE_SYS_SOCKET_H],1,[Define true if sys/socket.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_SYS_SOCKET_H],0,[Define true if sys/socket.h is available]))
+	AC_CHECK_HEADER([sys/utsname.h],
+		AC_DEFINE([GCONFIG_HAVE_SYS_UTSNAME_H],1,[Define true if sys/utsname.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_SYS_UTSNAME_H],0,[Define true if sys/utsname.h is available]))
+	AC_CHECK_HEADER([netdb.h],
+		AC_DEFINE([GCONFIG_HAVE_NETDB_H],1,[Define true if netdb.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_NETDB_H],0,[Define true if netdb.h is available]))
+	AC_CHECK_HEADER([netinet/in.h],
+		AC_DEFINE([GCONFIG_HAVE_NETINET_IN_H],1,[Define true if netinet/in.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_NETINET_IN_H],0,[Define true if netinet/in.h is available]))
+	AC_CHECK_HEADER([net/if.h],
+		AC_DEFINE([GCONFIG_HAVE_NET_IF_H],1,[Define true if net/if.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_NET_IF_H],0,[Define true if net/if.h is available]))
+	AC_CHECK_HEADER([arpa/inet.h],
+		AC_DEFINE([GCONFIG_HAVE_ARPA_INET_H],1,[Define true if arpa/inet.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_ARPA_INET_H],0,[Define true if arpa/inet.h is available]))
+	AC_CHECK_HEADER([stdint.h],
+		AC_DEFINE([GCONFIG_HAVE_STDINT_H],1,[Define true if stdint.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_STDINT_H],0,[Define true if stdint.h is available]))
+	AC_CHECK_HEADER([inttypes.h],
+		AC_DEFINE([GCONFIG_HAVE_INTTYPES_H],1,[Define true if inttypes.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_INTTYPES_H],0,[Define true if inttypes.h is available]))
+	AC_CHECK_HEADER([unistd.h],
+		AC_DEFINE([GCONFIG_HAVE_UNISTD_H],1,[Define true if unistd.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_UNISTD_H],0,[Define true if unistd.h is available]))
+	AC_CHECK_HEADER([errno.h],
+		AC_DEFINE([GCONFIG_HAVE_ERRNO_H],1,[Define true if errno.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_ERRNO_H],0,[Define true if errno.h is available]))
+	AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[#include <iphlpapi.h>]],[[]])],
+		AC_DEFINE([GCONFIG_HAVE_WINDOWS_IPHLPAPI_H],1,[Define true if iphlpapi.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_WINDOWS_IPHLPAPI_H],0,[Define true if iphlpapi.h is available]))
+	AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[#include <versionhelpers.h>]],[[]])],
+		AC_DEFINE([GCONFIG_HAVE_WINDOWS_VERSIONHELPERS_H],1,[Define true if versionhelpers.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_WINDOWS_VERSIONHELPERS_H],0,[Define true if versionhelpers.h is available]))
+	AC_CHECK_HEADER([pwd.h],
+		AC_DEFINE([GCONFIG_HAVE_PWD_H],1,[Define true if pwd.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_PWD_H],0,[Define true if pwd.h is available]))
+	AC_CHECK_HEADER([grp.h],
+		AC_DEFINE([GCONFIG_HAVE_GRP_H],1,[Define true if grp.h is available]),
+		AC_DEFINE([GCONFIG_HAVE_GRP_H],0,[Define true if grp.h is available]))
+])
+m4trace:m4/acinclude.m4:127: -1- AC_DEFUN([GCONFIG_FN_CHECK_NET], [
+	AC_REQUIRE([GCONFIG_FN_IPV6])
+	AC_REQUIRE([GCONFIG_FN_SIN6_LEN])
+	AC_REQUIRE([GCONFIG_FN_INET_NTOP])
+	AC_REQUIRE([GCONFIG_FN_INET_PTON])
+	AC_REQUIRE([GCONFIG_FN_EPOLL])
+	AC_REQUIRE([GCONFIG_FN_RTNETLINK])
+	AC_REQUIRE([GCONFIG_FN_NETROUTE])
+	AC_REQUIRE([GCONFIG_FN_IFNAMETOINDEX])
+	AC_REQUIRE([GCONFIG_FN_IFNAMETOLUID])
+	AC_REQUIRE([GCONFIG_FN_GAISTRERROR])
+	AC_REQUIRE([GCONFIG_FN_UDS])
+])
+m4trace:m4/acinclude.m4:145: -1- AC_DEFUN([GCONFIG_FN_CHECK_TYPES], [
+	AC_REQUIRE([GCONFIG_FN_TYPE_SOCKLEN_T])
+	AC_REQUIRE([GCONFIG_FN_TYPE_ERRNO_T])
+	AC_REQUIRE([GCONFIG_FN_TYPE_SSIZE_T])
+	AC_REQUIRE([GCONFIG_FN_TYPE_UINTPTR_T])
+	AC_REQUIRE([GCONFIG_FN_TYPE_INT64])
+	AC_REQUIRE([GCONFIG_FN_TYPE_INT32])
+	AC_REQUIRE([GCONFIG_FN_TYPE_INT16])
+	AC_CHECK_TYPES([pid_t],
+		AC_DEFINE([GCONFIG_HAVE_PID_T],1,[Define true if pid_t is a type]),
+		AC_DEFINE([GCONFIG_HAVE_PID_T],0,[Define true if pid_t is a type]))
+	AC_CHECK_TYPES([uid_t],
+		AC_DEFINE([GCONFIG_HAVE_UID_T],1,[Define true if uid_t is a type]),
+		AC_DEFINE([GCONFIG_HAVE_UID_T],0,[Define true if uid_t is a type]))
+	AC_CHECK_TYPES([gid_t],
+		AC_DEFINE([GCONFIG_HAVE_GID_T],1,[Define true if gid_t is a type]),
+		AC_DEFINE([GCONFIG_HAVE_GID_T],0,[Define true if gid_t is a type]))
+	AC_REQUIRE([GCONFIG_FN_STATBUF_TIMESPEC])
+	AC_REQUIRE([GCONFIG_FN_STATBUF_NSEC])
+	AC_REQUIRE([GCONFIG_FN_IOVEC_SIMPLE])
+])
+m4trace:m4/acinclude.m4:171: -1- AC_DEFUN([GCONFIG_FN_CXX_ALIGNMENT], [AC_CACHE_CHECK([for c++ std::align],[gconfig_cv_cxx_alignment],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <memory>]
+			[#include <cstring>]
+			[using std::size_t ;]
+			[void * x = 0 ;]
+			[int i[30] ;]
+			[void * p = &i[0] ;]
+			[size_t n = sizeof(i) ;]
+		],
+		[
+			[x = std::align(alignof(long),2,p,n) ;]
+		])],
+		gconfig_cv_cxx_alignment=yes ,
+		gconfig_cv_cxx_alignment=no )
+])
+	if test "$gconfig_cv_cxx_alignment" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_CXX_ALIGNMENT,1,[Define true if compiler has std::align()])
+	else
+		AC_DEFINE(GCONFIG_HAVE_CXX_ALIGNMENT,0,[Define true if compiler has std::align()])
+	fi
+])
+m4trace:m4/acinclude.m4:201: -1- AC_DEFUN([GCONFIG_FN_CXX_MAKE_UNIQUE], [AC_CACHE_CHECK([for c++ std::make_unique],[gconfig_cv_cxx_std_make_unique],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <memory>]
+			[#include <utility>]
+			[struct Foo {};]
+		],
+		[
+			[auto ptr = std::make_unique<Foo>() ;]
+		])],
+		gconfig_cv_cxx_std_make_unique=yes ,
+		gconfig_cv_cxx_std_make_unique=no )
+])
+	if test "$gconfig_cv_cxx_std_make_unique" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_CXX_MAKE_UNIQUE,1,[Define true if compiler has std::make_unique])
+	else
+		AC_DEFINE(GCONFIG_HAVE_CXX_MAKE_UNIQUE,0,[Define true if compiler has std::make_unique])
+	fi
+])
+m4trace:m4/acinclude.m4:228: -1- AC_DEFUN([GCONFIG_FN_CXX_STD_THREAD_PTHREAD], [
+	AC_MSG_CHECKING([for c++ std::thread without -pthread])
+	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <thread>]
+			[#include <cstdio>]
+		],
+		[
+			[std::thread t(std::fopen,"/dev/null","r");]
+			[t.join();]
+		])],
+		gconfig_cxx_std_thread_links=yes ,
+		gconfig_cxx_std_thread_links=no )
+	AC_MSG_RESULT([$gconfig_cxx_std_thread_links])
+
+	AC_MSG_CHECKING([for c++ std::thread at runtime])
+	AC_RUN_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <thread>]
+			[#include <cstdio>]
+		],
+		[
+			[std::thread t(std::fopen,"/dev/null","r");]
+			[t.join();]
+		])],
+		gconfig_cxx_std_thread=yes ,
+		gconfig_cxx_std_thread=no ,
+		gconfig_cxx_std_thread=$gconfig_cxx_std_thread_links )
+	AC_MSG_RESULT([$gconfig_cxx_std_thread])
+
+	if test "$gconfig_cxx_std_thread" != "yes"
+	then
+		gconfig_save_CXXFLAGS="$CXXFLAGS"
+		gconfig_save_LDFLAGS="$LDFLAGS"
+		CXXFLAGS="$CXXFLAGS -pthread"
+		LDFLAGS="$LDFLAGS -pthread"
+		AC_MSG_CHECKING([for c++ std::thread with -pthread])
+		AC_LINK_IFELSE([AC_LANG_PROGRAM(
+			[
+				[#include <thread>]
+				[#include <cstdio>]
+			],
+			[
+				[std::thread t(std::fopen,"/dev/null","r");]
+				[t.join();]
+			])],
+			gconfig_cxx_std_thread=yes ,
+			gconfig_cxx_std_thread=no )
+		AC_MSG_RESULT([$gconfig_cxx_std_thread])
+		if test "$gconfig_cxx_std_thread" = "no" ; then
+			CXXFLAGS="$gconfig_save_CXXFLAGS"
+			LDFLAGS="$gconfig_save_LDFLAGS"
+		fi
+	fi
+])
+m4trace:m4/acinclude.m4:291: -1- AC_DEFUN([GCONFIG_FN_CXX_STD_THREAD_IMP], [
+	if test "$enable_std_thread" = "no"
+	then
+		AC_DEFINE(GCONFIG_HAVE_CXX_STD_THREAD,0,[Define true if compiler has std::thread])
+	else
+		GCONFIG_FN_CXX_STD_THREAD_PTHREAD
+
+		if test "$gconfig_cxx_std_thread" = "yes" ; then
+			AC_DEFINE(GCONFIG_HAVE_CXX_STD_THREAD,1,[Define true if compiler has std::thread])
+		else
+			AC_DEFINE(GCONFIG_HAVE_CXX_STD_THREAD,0,[Define true if compiler has std::thread])
+			gconfig_warnings="$gconfig_warnings $1"
+		fi
+	fi
+])
+m4trace:m4/acinclude.m4:312: -1- AC_DEFUN([GCONFIG_FN_CXX_STD_THREAD], [
+	GCONFIG_FN_CXX_STD_THREAD_IMP([std::thread_asynchronous_script_execution])
+])
+m4trace:m4/acinclude.m4:322: -1- AC_DEFUN([GCONFIG_FN_ENABLE_BSD], [
+	gconfig_bsd="$enable_bsd"
+	AM_CONDITIONAL([GCONFIG_BSD],test "$enable_bsd" = "yes" -o "`uname`" = "NetBSD" -o "`uname`" = "FreeBSD" -o "`uname`" = "OpenBSD" )
+])
+m4trace:m4/acinclude.m4:334: -1- AC_DEFUN([GCONFIG_FN_ENABLE_DEBUG], [
+	if test "$enable_debug" = "no" -o -z "$enable_debug"
+	then
+		:
+	else
+		AC_DEFINE(_DEBUG,1,[Define to enable debug messages at compile-time])
+	fi
+])
+m4trace:m4/acinclude.m4:349: -1- AC_DEFUN([GCONFIG_FN_ENABLE_EPOLL], [
+	if test "$enable_epoll" != "no"
+	then
+		if test "$gconfig_cv_epoll" = "no"
+		then
+			if test "$enable_epoll" = "yes"
+			then
+				AC_MSG_WARN([ignoring --enable-epoll])
+			fi
+			gconfig_use_epoll="no"
+		else
+			gconfig_use_epoll="yes"
+		fi
+	else
+		gconfig_use_epoll="no"
+	fi
+
+	if test "$gconfig_use_epoll" = "yes" ; then
+		AC_DEFINE(GCONFIG_ENABLE_EPOLL,1,[Define true to use epoll])
+	else
+		AC_DEFINE(GCONFIG_ENABLE_EPOLL,0,[Define true to use epoll])
+	fi
+	AM_CONDITIONAL([GCONFIG_EPOLL],test "$gconfig_use_epoll" = "yes")
+])
+m4trace:m4/acinclude.m4:381: -1- AC_DEFUN([GCONFIG_FN_ENABLE_GUI], [
+	if test "$enable_gui" = "no"
+	then
+		gconfig_gui="no"
+	:
+	elif test "$enable_gui" = "yes"
+	then
+		gconfig_gui="yes"
+		if test "$gconfig_have_qt" = "no"
+		then
+			AC_MSG_WARN([gui enabled but no qt tools found])
+		fi
+		if test "$gconfig_qt_build" = "no"
+		then
+			AC_MSG_WARN([gui enabled but qt does not compile])
+		fi
+	:
+	else
+		if test "$gconfig_have_qt" = "yes" -a "$gconfig_qt_build" = "yes"
+		then
+			gconfig_gui="yes"
+		else
+			gconfig_gui="no"
+		fi
+	fi
+
+	if test "$gconfig_gui" = "no" -a "$enable_gui" != "no"
+	then
+		gconfig_warnings="$gconfig_warnings qt_graphical_user_interface"
+	fi
+
+	AC_SUBST([GCONFIG_QT_LIBS],[$QT_LIBS])
+	AC_SUBST([GCONFIG_QT_CFLAGS],[$QT_CFLAGS])
+	AC_SUBST([GCONFIG_QT_MOC],[$QT_MOC])
+
+	AM_CONDITIONAL([GCONFIG_GUI],[test "$gconfig_gui" = "yes"])
+])
+m4trace:m4/acinclude.m4:427: -1- AC_DEFUN([GCONFIG_FN_ENABLE_INSTALL_HOOK], [
+	AM_CONDITIONAL([GCONFIG_INSTALL_HOOK],test "$enable_install_hook" != "no")
+])
+m4trace:m4/acinclude.m4:438: -1- AC_DEFUN([GCONFIG_FN_ENABLE_INTERFACE_NAMES], [
+	AM_CONDITIONAL([GCONFIG_INTERFACE_NAMES],test "$enable_interface_names" != "no")
+])
+m4trace:m4/acinclude.m4:448: -1- AC_DEFUN([GCONFIG_FN_ENABLE_IPV6], [
+	if test "$enable_ipv6" = "no"
+	then
+		gconfig_use_ipv6="no"
+	else
+		if test "$gconfig_cv_ipv6" = "no"
+		then
+			if test "$enable_ipv6" = "yes"
+			then
+				AC_MSG_WARN([ignoring --enable-ipv6])
+			fi
+			gconfig_use_ipv6="no"
+		else
+			gconfig_use_ipv6="yes"
+		fi
+	fi
+
+	if test "$enable_ipv6" != "no" -a "$gconfig_use_ipv6" = "no"
+	then
+		gconfig_warnings="$gconfig_warnings ipv6_ipv6_networking"
+	fi
+
+	if test "$gconfig_use_ipv6" = "yes" ; then
+		AC_DEFINE(GCONFIG_ENABLE_IPV6,1,[Define true to use IPv6])
+	else
+		AC_DEFINE(GCONFIG_ENABLE_IPV6,0,[Define true to use IPv6])
+	fi
+	AM_CONDITIONAL([GCONFIG_IPV6],test "$gconfig_use_ipv6" = "yes")
+])
+m4trace:m4/acinclude.m4:484: -1- AC_DEFUN([GCONFIG_FN_ENABLE_MAC], [
+	AM_CONDITIONAL([GCONFIG_MAC],test "$enable_mac" = "yes" -o "`uname`" = "Darwin")
+])
+m4trace:m4/acinclude.m4:497: -1- AC_DEFUN([GCONFIG_FN_ENABLE_STD_THREAD], [
+	if test "$enable_std_thread" = "no"
+	then
+		AC_DEFINE(GCONFIG_ENABLE_STD_THREAD,0,[Define true to use std::thread])
+	else
+		if test "$enable_std_thread" = "yes"
+		then
+			if test "$gconfig_cxx_std_thread" = "no"
+			then
+				AC_MSG_WARN([std::thread test compilation failed - see config.log])
+				AC_MSG_WARN([try setting CXXFLAGS etc to enable the compiler's c++11 threading support])
+				AC_MSG_ERROR([cannot enable std::thread because the feature test failed])
+			fi
+			AC_DEFINE(GCONFIG_ENABLE_STD_THREAD,1,[Define true to use std::thread])
+		else
+			if test "$gconfig_cxx_std_thread" = "yes"
+			then
+				AC_DEFINE(GCONFIG_ENABLE_STD_THREAD,1,[Define true to use std::thread])
+			else
+				AC_DEFINE(GCONFIG_ENABLE_STD_THREAD,0,[Define true to use std::thread])
+			fi
+		fi
+	fi
+])
+m4trace:m4/acinclude.m4:529: -1- AC_DEFUN([GCONFIG_FN_ENABLE_TESTING], [
+	AM_CONDITIONAL([GCONFIG_TESTING],test "$enable_testing" != "no")
+])
+m4trace:m4/acinclude.m4:539: -1- AC_DEFUN([GCONFIG_FN_ENABLE_VERBOSE], [
+	if test "$enable_verbose" != "no"
+	then
+		:
+	else
+		AC_DEFINE(GCONFIG_NO_LOG,1,[Define to disable the G_LOG macro])
+	fi
+])
+m4trace:m4/acinclude.m4:555: -1- AC_DEFUN([GCONFIG_FN_ENABLE_WINDOWS], [
+	if test "$enable_windows" = "yes" -o "`uname -o 2>/dev/null`" = "Msys"
+	then
+		AC_DEFINE(GCONFIG_WINDOWS,1,[Define true for a windows build])
+		AC_DEFINE(GCONFIG_MINGW,1,[Define true for a windows build using the mingw tool chain])
+	else
+		AC_DEFINE(GCONFIG_WINDOWS,0,[Define true for a windows build])
+		AC_DEFINE(GCONFIG_MINGW,0,[Define true for a windows build using the mingw tool chain])
+	fi
+	AM_CONDITIONAL([GCONFIG_WINDOWS],test "$enable_windows" = "yes" -o "`uname -o 2>/dev/null`" = "Msys")
+])
+m4trace:m4/acinclude.m4:572: -1- AC_DEFUN([GCONFIG_FN_EPOLL], [AC_CACHE_CHECK([for epoll],[gconfig_cv_epoll],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/epoll.h>]
+			[int fd = 0 ;]
+		] ,
+		[
+			[fd = epoll_create1( EPOLL_CLOEXEC ) ;]
+		])] ,
+		[gconfig_cv_epoll=yes],
+		[gconfig_cv_epoll=no])
+])
+	if test "$gconfig_cv_epoll" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_EPOLL,1,[Define true to enable use of epoll])
+	else
+		AC_DEFINE(GCONFIG_HAVE_EPOLL,0,[Define true to enable use of epoll])
+	fi
+])
+m4trace:m4/acinclude.m4:597: -1- AC_DEFUN([GCONFIG_FN_EXECVPE], [AC_CACHE_CHECK([for execvpe],[gconfig_cv_execvpe],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <unistd.h>]
+			[char * array[] = { 0 , 0 } ;]
+			[int rc = 0 ;]
+		],
+		[
+			[rc = execvpe( "path" , array , array ) ;]
+		])],
+		gconfig_cv_execvpe=yes ,
+		gconfig_cv_execvpe=no )
+])
+	if test "$gconfig_cv_execvpe" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_EXECVPE,1,[Define true if have execvpe() in unistd.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_EXECVPE,0,[Define true if have execvpe() in unistd.h])
+	fi
+])
+m4trace:m4/acinclude.m4:624: -1- AC_DEFUN([GCONFIG_FN_EXTENDED_OPEN], [AC_CACHE_CHECK([for extended fstream open],[gconfig_cv_extended_open],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <windows.h>]
+			[#include <share.h>]
+			[#include <fstream>]
+		],
+		[
+			[std::ofstream stream ;]
+			[stream.open(".",std::ios_base::out,_SH_DENYNO) ;]
+		])],
+		gconfig_cv_extended_open=yes ,
+		gconfig_cv_extended_open=no )
+])
+	if test "$gconfig_cv_extended_open" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_EXTENDED_OPEN,1,[Define true if extended fstream::open() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_EXTENDED_OPEN,0,[Define true if extended fstream::open() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:651: -1- AC_DEFUN([GCONFIG_FN_FSOPEN], [AC_CACHE_CHECK([for _fsopen()],[gconfig_cv_fsopen],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <stdio.h>]
+			[#include <share.h>]
+			[FILE * fp = 0 ;]
+		],
+		[
+			[fp = _fsopen("foo","w",_SH_DENYNO) ;]
+		])],
+		gconfig_cv_fsopen=yes ,
+		gconfig_cv_fsopen=no )
+])
+	if test "$gconfig_cv_fsopen" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_FSOPEN,1,[Define true if _fsopen() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_FSOPEN,0,[Define true if _fsopen() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:677: -1- AC_DEFUN([GCONFIG_FN_GAISTRERROR], [AC_CACHE_CHECK([for gai_strerror()],[gconfig_cv_gaistrerror],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+				[#include <iphlpapi.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/socket.h>]
+				[#include <netdb.h>]
+			[#endif]
+			[const char * p = 0;]
+		],
+		[
+			[p = gai_strerror( 123 ) ;]
+		])],
+		gconfig_cv_gaistrerror=yes ,
+		gconfig_cv_gaistrerror=no )
+])
+	if test "$gconfig_cv_gaistrerror" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GAISTRERROR,1,[Define true if gai_strerror() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GAISTRERROR,0,[Define true if gai_strerror() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:711: -1- AC_DEFUN([GCONFIG_FN_GETENV_S], [AC_CACHE_CHECK([for getenv_s],[gconfig_cv_getenv_s],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#endif]
+			[#include <stdlib.h>]
+			[size_t n = 10 ;]
+			[char buf[10] ;]
+		],
+		[
+			[getenv_s( &n , buf , 10U , "foo" ) ;]
+		])],
+		gconfig_cv_getenv_s=yes ,
+		gconfig_cv_getenv_s=no )
+])
+	if test "$gconfig_cv_getenv_s" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GETENV_S,1,[Define true if getenv_s in stdlib.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GETENV_S,0,[Define true if getenv_s in stdlib.h])
+	fi
+])
+m4trace:m4/acinclude.m4:742: -1- AC_DEFUN([GCONFIG_FN_GETPWNAM], [AC_CACHE_CHECK([for getpwnam],[gconfig_cv_getpwnam],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <pwd.h>]
+			[struct passwd * p = 0 ;]
+		],
+		[
+			[p = getpwnam( "x" ) ;]
+		])],
+		gconfig_cv_getpwnam=yes ,
+		gconfig_cv_getpwnam=no )
+])
+	if test "$gconfig_cv_getpwnam" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GETPWNAM,1,[Define true if getpwnam in pwd.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GETPWNAM,0,[Define true if getpwnam in pwd.h])
+	fi
+])
+m4trace:m4/acinclude.m4:768: -1- AC_DEFUN([GCONFIG_FN_GETPWNAM_R], [AC_CACHE_CHECK([for getpwnam_r],[gconfig_cv_getpwnam_r],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <pwd.h>]
+			[char buf[100] ;]
+			[struct passwd p ;]
+			[struct passwd * p_out = 0 ;]
+		],
+		[
+			[getpwnam_r( "x" , &p , buf , 100U , &p_out ) ;]
+		])],
+		gconfig_cv_getpwnam_r=yes ,
+		gconfig_cv_getpwnam_r=no )
+])
+	if test "$gconfig_cv_getpwnam_r" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GETPWNAM_R,1,[Define true if getpwnam_r in pwd.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GETPWNAM_R,0,[Define true if getpwnam_r in pwd.h])
+	fi
+])
+m4trace:m4/acinclude.m4:796: -1- AC_DEFUN([GCONFIG_FN_GETGRNAM], [AC_CACHE_CHECK([for getgrnam],[gconfig_cv_getgrnam],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <grp.h>]
+			[struct group * p = 0 ;]
+		],
+		[
+			[p = getgrnam( "x" ) ;]
+		])],
+		gconfig_cv_getgrnam=yes ,
+		gconfig_cv_getgrnam=no )
+])
+	if test "$gconfig_cv_getgrnam" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GETGRNAM,1,[Define true if getgrnam in pwd.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GETGRNAM,0,[Define true if getgrnam in pwd.h])
+	fi
+])
+m4trace:m4/acinclude.m4:822: -1- AC_DEFUN([GCONFIG_FN_GETGRNAM_R], [AC_CACHE_CHECK([for getgrnam_r],[gconfig_cv_getgrnam_r],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <grp.h>]
+			[char buf[100] ;]
+			[struct group p ;]
+			[struct group * p_out = 0 ;]
+		],
+		[
+			[getgrnam_r( "x" , &p , buf , 100U , &p_out ) ;]
+		])],
+		gconfig_cv_getgrnam_r=yes ,
+		gconfig_cv_getgrnam_r=no )
+])
+	if test "$gconfig_cv_getgrnam_r" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GETGRNAM_R,1,[Define true if getgrnam_r in pwd.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GETGRNAM_R,0,[Define true if getgrnam_r in pwd.h])
+	fi
+])
+m4trace:m4/acinclude.m4:856: -1- AC_DEFUN([GCONFIG_FN_GETTEXT], [AC_CACHE_CHECK([for gettext],[gconfig_cv_gettext],
+[
+	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <libintl.h>]
+			[const char * p = 0;]
+			[const char * dir = 0;]
+			[const char * md = 0;]
+		],
+		[
+			[p = gettext( "foo" );]
+			[dir = bindtextdomain( "foo" , "bar" );]
+			[md = textdomain( "foo" );]
+		])],
+		gconfig_cv_gettext=yes ,
+		gconfig_cv_gettext=no )
+])
+])
+m4trace:m4/acinclude.m4:880: -1- AC_DEFUN([GCONFIG_FN_GMTIME_R], [AC_CACHE_CHECK([for gmtime_r],[gconfig_cv_gmtime_r],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <time.h>]
+			[time_t t = 0 ;]
+			[struct tm b ;]
+			[struct tm * bp = 0 ;]
+		],
+		[
+			[bp = gmtime_r(&t,&b) ;]
+		])],
+		gconfig_cv_gmtime_r=yes ,
+		gconfig_cv_gmtime_r=no )
+])
+	if test "$gconfig_cv_gmtime_r" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GMTIME_R,1,[Define true if gmtime_r in time.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GMTIME_R,0,[Define true if gmtime_r in time.h])
+	fi
+])
+m4trace:m4/acinclude.m4:907: -1- AC_DEFUN([GCONFIG_FN_GMTIME_S], [AC_CACHE_CHECK([for gmtime_s],[gconfig_cv_gmtime_s],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#endif]
+			[#include <time.h>]
+			[time_t t = 0 ;]
+			[struct tm b ;]
+		],
+		[
+			[gmtime_s( &b , &t ) ;]
+		])],
+		gconfig_cv_gmtime_s=yes ,
+		gconfig_cv_gmtime_s=no )
+])
+	if test "$gconfig_cv_gmtime_s" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GMTIME_S,1,[Define true if gmtime_s in time.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GMTIME_S,0,[Define true if gmtime_s in time.h])
+	fi
+])
+m4trace:m4/acinclude.m4:938: -1- AC_DEFUN([GCONFIG_FN_ICONV], [
+	AC_REQUIRE([GCONFIG_FN_ICONV_LIBC])
+	AC_REQUIRE([GCONFIG_FN_ICONV_LIBICONV])
+	if test "$gconfig_cv_iconv_libc" = "yes" -o "$gconfig_cv_iconv_libiconv" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_ICONV,1,[Define true to enable use of iconv])
+	else
+		AC_DEFINE(GCONFIG_HAVE_ICONV,0,[Define true to enable use of iconv])
+	fi
+	AM_CONDITIONAL([GCONFIG_ICONV],[test "$gconfig_cv_iconv_libc" = "yes" -o "$gconfig_cv_iconv_libiconv" = "yes"])
+])
+m4trace:m4/acinclude.m4:960: -1- AC_DEFUN([GCONFIG_FN_ICONV_LIBC], [AC_CACHE_CHECK([for iconv in libc],[gconfig_cv_iconv_libc],
+[
+	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <stdlib.h>]
+			[#include <iconv.h>]
+		],
+		[
+			[iconv_t i = iconv_open( "C" , "utf8" ) ;]
+			[iconv( i , NULL , NULL , NULL , NULL ) ;]
+			[iconv_close(i) ;]
+		])],
+		gconfig_cv_iconv_libc=yes ,
+		gconfig_cv_iconv_libc=no )
+])
+])
+m4trace:m4/acinclude.m4:982: -1- AC_DEFUN([GCONFIG_FN_ICONV_LIBICONV], [AC_CACHE_CHECK([for iconv in libiconv],[gconfig_cv_iconv_libiconv],
+[
+	gconfig_save_LIBS="$LIBS"
+	LIBS="$LIBS -liconv"
+	AC_LINK_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <stdlib.h>]
+			[#include <iconv.h>]
+		],
+		[
+			[iconv_t i = iconv_open( "C" , "utf8" ) ;]
+			[iconv( i , NULL , NULL , NULL , NULL ) ;]
+			[iconv_close(i) ;]
+		])],
+		gconfig_cv_iconv_libiconv=yes ,
+		gconfig_cv_iconv_libiconv=no )
+	])
+	if test "$gconfig_cv_iconv_libiconv" = "no" ; then
+		LIBS="$gconfig_save_LIBS"
+	fi
+])
+m4trace:m4/acinclude.m4:1010: -1- AC_DEFUN([GCONFIG_FN_IFNAMETOINDEX], [AC_CACHE_CHECK([for if_nametoindex()],[gconfig_cv_ifnametoindex],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+				[#include <iphlpapi.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/socket.h>]
+				[#include <arpa/inet.h>]
+				[#include <net/if.h>]
+			[#endif]
+			[unsigned int i = 0 ;]
+		],
+		[
+			[i = if_nametoindex("net0") ;]
+		])],
+		gconfig_cv_ifnametoindex=yes ,
+		gconfig_cv_ifnametoindex=no )
+])
+	if test "$gconfig_cv_ifnametoindex" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_IFNAMETOINDEX,1,[Define true if if_nametoindex() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_IFNAMETOINDEX,0,[Define true if if_nametoindex() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1045: -1- AC_DEFUN([GCONFIG_FN_IFNAMETOLUID], [AC_CACHE_CHECK([for ConvertInterfaceNameToLuid()],[gconfig_cv_ifnametoluid],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+				[#include <iphlpapi.h>]
+			[#endif]
+			[NET_LUID luid ;]
+		],
+		[
+			[ConvertInterfaceNameToLuidA( "eth0" , &luid ) ;]
+		])],
+		gconfig_cv_ifnametoluid=yes ,
+		gconfig_cv_ifnametoluid=no )
+])
+	if test "$gconfig_cv_ifnametoluid" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_IFNAMETOLUID,1,[Define true if ConvertInterfaceNameToLuid() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_IFNAMETOLUID,0,[Define true if ConvertInterfaceNameToLuid() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1075: -1- AC_DEFUN([GCONFIG_FN_INET_NTOP], [AC_CACHE_CHECK([for inet_ntop()],[gconfig_cv_inet_ntop],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/socket.h>]
+				[#include <netinet/in.h>]
+				[#include <arpa/inet.h>]
+			[#endif]
+			[char a[100] ;]
+			[char buffer[100] ;]
+		],
+		[
+			[inet_ntop(AF_INET,a,buffer,10) ;]
+		])],
+		gconfig_cv_inet_ntop=yes ,
+		gconfig_cv_inet_ntop=no )
+])
+	if test "$gconfig_cv_inet_ntop" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_INET_NTOP,1,[Define true if inet_ntop() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_INET_NTOP,0,[Define true if inet_ntop() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1110: -1- AC_DEFUN([GCONFIG_FN_INET_PTON], [AC_CACHE_CHECK([for inet_pton()],[gconfig_cv_inet_pton],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/socket.h>]
+				[#include <netinet/in.h>]
+				[#include <arpa/inet.h>]
+			[#endif]
+			[char buffer[100] ;]
+		],
+		[
+			[inet_pton(AF_INET,"0",buffer) ;]
+		])],
+		gconfig_cv_inet_pton=yes ,
+		gconfig_cv_inet_pton=no )
+])
+	if test "$gconfig_cv_inet_pton" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_INET_PTON,1,[Define true if inet_pton() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_INET_PTON,0,[Define true if inet_pton() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1145: -1- AC_DEFUN([GCONFIG_FN_IOVEC_SIMPLE], [AC_CACHE_CHECK([for iovec layout],[gconfig_cv_iovec_is_simple],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <cstddef>]
+			[#include <sys/types.h>]
+			[#include <sys/uio.h>]
+			[struct simple { const char * p ; std::size_t n ; } ;]
+		],
+		[
+            static_assert( sizeof(simple) == sizeof(::iovec) , "" ) ;
+            static_assert( alignof(simple) == alignof(::iovec) , "" ) ;
+            static_assert( sizeof(simple::p) == sizeof(::iovec::iov_base) , "" ) ;
+            static_assert( sizeof(simple::n) == sizeof(::iovec::iov_len) , "" ) ;
+            static_assert( offsetof(simple,p) == offsetof(::iovec,iov_base) , "" ) ;
+            static_assert( offsetof(simple,n) == offsetof(::iovec,iov_len) , "" ) ;
+		])],
+		gconfig_cv_iovec_is_simple=yes ,
+		gconfig_cv_iovec_is_simple=no )
+])
+	if test "$gconfig_cv_iovec_is_simple" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_IOVEC_SIMPLE,1,[Define true if struct iovec has a simple layout])
+	else
+		AC_DEFINE(GCONFIG_HAVE_IOVEC_SIMPLE,0,[Define true if struct iovec has a simple layout])
+	fi
+])
+m4trace:m4/acinclude.m4:1177: -1- AC_DEFUN([GCONFIG_FN_IPV6], [AC_CACHE_CHECK([for ipv6],[gconfig_cv_ipv6],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/socket.h>]
+				[#include <netinet/in.h>]
+				[#include <arpa/inet.h>]
+				[#include <netdb.h>]
+			[#endif]
+			[struct sockaddr_in6 * p = 0;]
+			[int f = AF_INET6 ;]
+			[struct addrinfo ai ;]
+			[struct addrinfo *aip = 0 ;]
+		],
+		[
+			[getaddrinfo("local","http",&ai,&aip) ;]
+		])],
+		gconfig_cv_ipv6=yes ,
+		gconfig_cv_ipv6=no )
+])
+	if test "$gconfig_cv_ipv6" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_IPV6,1,[Define true if ipv6 is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_IPV6,0,[Define true if ipv6 is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1215: -1- AC_DEFUN([GCONFIG_FN_LOCALTIME_R], [AC_CACHE_CHECK([for localtime_r],[gconfig_cv_localtime_r],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <time.h>]
+			[time_t t = 0 ;]
+			[struct tm b ;]
+			[struct tm * bp ;]
+		],
+		[
+			[bp = localtime_r( &t , &b ) ;]
+		])],
+		gconfig_cv_localtime_r=yes ,
+		gconfig_cv_localtime_r=no )
+])
+	if test "$gconfig_cv_localtime_r" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_LOCALTIME_R,1,[Define true if localtime_r in time.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_LOCALTIME_R,0,[Define true if localtime_r in time.h])
+	fi
+])
+m4trace:m4/acinclude.m4:1242: -1- AC_DEFUN([GCONFIG_FN_LOCALTIME_S], [AC_CACHE_CHECK([for localtime_s],[gconfig_cv_localtime_s],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#endif]
+			[#include <time.h>]
+			[time_t t ;]
+			[struct tm b ;]
+		],
+		[
+			[localtime_s( &b , &t ) ;]
+		])],
+		gconfig_cv_localtime_s=yes ,
+		gconfig_cv_localtime_s=no )
+])
+	if test "$gconfig_cv_localtime_s" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_LOCALTIME_S,1,[Define true if localtime_s in time.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_LOCALTIME_S,0,[Define true if localtime_s in time.h])
+	fi
+])
+m4trace:m4/acinclude.m4:1273: -1- AC_DEFUN([GCONFIG_FN_NETROUTE], [AC_CACHE_CHECK([for routing sockets],[gconfig_cv_netroute],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <sys/time.h>]
+			[#include <sys/socket.h>]
+			[#include <net/if.h>]
+			[#include <net/route.h>]
+			[struct rt_msghdr header1 ;]
+			[struct ifa_msghdr header2 ;]
+		] ,
+		[
+			[(void) socket( PF_ROUTE , SOCK_RAW , AF_INET ) ;]
+			[header1.rtm_msglen = header2.ifam_msglen = 0 ;]
+			[header1.rtm_type = RTM_ADD ;]
+			[header2.ifam_type = RTM_NEWADDR ;]
+		])] ,
+		[gconfig_cv_netroute=yes],
+		[gconfig_cv_netroute=no])
+])
+	if test "$gconfig_cv_netroute" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_NETROUTE,1,[Define true to enable use of bsd routing sockets])
+	else
+		AC_DEFINE(GCONFIG_HAVE_NETROUTE,0,[Define true to enable use of bsd routing sockets])
+		if test "`uname`" = "NetBSD" -o "`uname`" = "FreeBSD" -o "`uname`" = "OpenBSD" ; then
+			gconfig_warnings="$gconfig_warnings netroute_network_interface_event_notification"
+		fi
+	fi
+])
+m4trace:m4/acinclude.m4:1309: -1- AC_DEFUN([GCONFIG_FN_PAM], [
+	AC_REQUIRE([GCONFIG_FN_PAM_IN_SECURITY])
+	AC_REQUIRE([GCONFIG_FN_PAM_IN_PAM])
+	AC_REQUIRE([GCONFIG_FN_PAM_IN_INCLUDE])
+
+	if test "$gconfig_cv_pam_in_security" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_PAM_IN_SECURITY,1,[Define true to include pam_appl.h from security])
+	else
+		AC_DEFINE(GCONFIG_HAVE_PAM_IN_SECURITY,0,[Define true to include pam_appl.h from security])
+	fi
+
+	if test "$gconfig_cv_pam_in_pam" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_PAM_IN_PAM,1,[Define true to include pam_appl.h from pam])
+	else
+		AC_DEFINE(GCONFIG_HAVE_PAM_IN_PAM,0,[Define true to include pam_appl.h from pam])
+	fi
+
+	if test "$gconfig_cv_pam_in_include" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_PAM_IN_INCLUDE,1,[Define true to include pam_appl.h as-is])
+	else
+		AC_DEFINE(GCONFIG_HAVE_PAM_IN_INCLUDE,0,[Define true to include pam_appl.h as-is])
+	fi
+])
+m4trace:m4/acinclude.m4:1339: -1- AC_DEFUN([GCONFIG_FN_PAM_IN_SECURITY], [AC_CACHE_CHECK([for security/pam_appl.h],[gconfig_cv_pam_in_security],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <security/pam_appl.h>]
+			[pam_conv c ; pam_handle_t *pam = 0 ; int rc = 0 ;]
+		] ,
+		[
+			[rc = pam_start("login","user",&c,&pam) ;]
+		])] ,
+		[gconfig_cv_pam_in_security=yes],
+		[gconfig_cv_pam_in_security=no])
+])
+])
+m4trace:m4/acinclude.m4:1354: -1- AC_DEFUN([GCONFIG_FN_PAM_IN_PAM], [AC_CACHE_CHECK([for pam/pam_appl.h],[gconfig_cv_pam_in_pam],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <pam/pam_appl.h>]
+			[pam_conv c ; pam_handle_t *pam = 0 ; int rc = 0 ;]
+		] ,
+		[
+			[rc = pam_start("login","user",&c,&pam) ;]
+		])] ,
+		[gconfig_cv_pam_in_pam=yes],
+		[gconfig_cv_pam_in_pam=no])
+])
+])
+m4trace:m4/acinclude.m4:1369: -1- AC_DEFUN([GCONFIG_FN_PAM_IN_INCLUDE], [AC_CACHE_CHECK([for include/pam_appl.h],[gconfig_cv_pam_in_include],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <pam_appl.h>]
+			[pam_conv c ; pam_handle_t *pam = 0 ; int rc = 0 ;]
+		] ,
+		[
+			[rc = pam_start("login","user",&c,&pam) ;]
+		])] ,
+		[gconfig_cv_pam_in_include=yes],
+		[gconfig_cv_pam_in_include=no])
+])
+])
+m4trace:m4/acinclude.m4:1389: -1- AC_DEFUN([GCONFIG_FN_PAM_CONST], [AC_CACHE_CHECK([for pam constness],[gconfig_cv_pam_const],
+[
+	if test "$gconfig_cv_pam_in_security" = "yes"
+	then
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+			[
+				[#include <security/pam_appl.h>]
+				[const void * vp = 0; pam_handle_t * pam = 0; int rc = 0;]
+			],
+			[
+				[rc = pam_get_item( pam , PAM_USER , &vp )]
+			])],
+			gconfig_cv_pam_const=yes ,
+			gconfig_cv_pam_const=no )
+	else
+		if test "$gconfig_cv_pam_in_pam" = "yes"
+		then
+			AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+				[
+					[#include <pam/pam_appl.h>]
+					[const void * vp = 0; pam_handle_t * pam = 0; int rc = 0;]
+				],
+				[
+					[rc = pam_get_item( pam , PAM_USER , &vp )]
+				])],
+				gconfig_cv_pam_const=yes ,
+				gconfig_cv_pam_const=no )
+		else
+			AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+				[
+					[#include <pam_appl.h>]
+					[const void * vp = 0; pam_handle_t * pam = 0; int rc = 0;]
+				],
+				[
+					[rc = pam_get_item( pam , PAM_USER , &vp )]
+				])],
+				gconfig_cv_pam_const=yes ,
+				gconfig_cv_pam_const=no )
+		fi
+	fi
+])
+	if test "$gconfig_cv_pam_const" = "yes" ; then
+		AC_DEFINE(GCONFIG_PAM_CONST,1,[Define true if the PAM API uses const])
+	else
+		AC_DEFINE(GCONFIG_PAM_CONST,0,[Define true if the PAM API uses const])
+	fi
+])
+m4trace:m4/acinclude.m4:1442: -1- AC_DEFUN([GCONFIG_FN_PROC_PIDPATH], [AC_CACHE_CHECK([for proc_pidpath],[gconfig_cv_proc_pidpath],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <stdlib.h>]
+			[#include <libproc.h>]
+			[char buf[100] ;]
+			[int rc = 0 ;]
+		],
+		[
+			[rc = proc_pidpath( (pid_t)1 , buf , sizeof(buf) ) ;]
+		])],
+		gconfig_cv_proc_pidpath=yes ,
+		gconfig_cv_proc_pidpath=no )
+])
+	if test "$gconfig_cv_proc_pidpath" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_PROC_PIDPATH,1,[Define true if have OSX proc_pidpath()])
+	else
+		AC_DEFINE(GCONFIG_HAVE_PROC_PIDPATH,0,[Define true if have OSX proc_pidpath()])
+	fi
+])
+m4trace:m4/acinclude.m4:1471: -1- AC_DEFUN([GCONFIG_FN_PROG_WINDMC], [
+	if test "$GCONFIG_WINDMC" = ""
+	then
+		GCONFIG_WINDMC="`echo \"$CXX\" | sed -E 's/-[gc]\+\+.*/-windmc/'`"
+		if test "$GCONFIG_WINDMC" = ""
+		then
+			GCONFIG_WINDMC="./fakemc.exe"
+		fi
+	fi
+	AC_MSG_CHECKING([message compiler])
+	AC_MSG_RESULT([$GCONFIG_WINDMC])
+	AC_SUBST([GCONFIG_WINDMC])
+])
+m4trace:m4/acinclude.m4:1491: -1- AC_DEFUN([GCONFIG_FN_PROG_WINDRES], [
+	if test "$GCONFIG_WINDRES" = ""
+	then
+		GCONFIG_WINDRES="`echo \"$CXX\" | sed -E 's/-[gc]\+\+.*/-windres/'`"
+		if test "$GCONFIG_WINDRES" = ""
+		then
+			GCONFIG_WINDRES="windres"
+		fi
+	fi
+	AC_MSG_CHECKING([for resource compiler])
+	AC_MSG_RESULT([$GCONFIG_WINDRES])
+	AC_SUBST([GCONFIG_WINDRES])
+])
+m4trace:m4/acinclude.m4:1509: -1- AC_DEFUN([GCONFIG_FN_PTHREAD_SIGMASK], [AC_CACHE_CHECK([for pthread_sigmask],[gconfig_cv_pthread_sigmask],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <csignal>]
+			[#include <cstddef>]
+			[sigset_t set ;]
+			[int rc ;]
+		],
+		[
+			[sigemptyset( &set ) ;]
+			[sigaddset( &set , SIGTERM ) ;]
+			[rc = pthread_sigmask( SIG_BLOCK|SIG_UNBLOCK|SIG_SETMASK , &set , NULL ) ;]
+		])],
+		gconfig_cv_pthread_sigmask=yes ,
+		gconfig_cv_pthread_sigmask=no )
+])
+	if test "$gconfig_cv_pthread_sigmask" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_PTHREAD_SIGMASK,1,[Define true if pthread_sigmask() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_PTHREAD_SIGMASK,0,[Define true if pthread_sigmask() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1538: -1- AC_DEFUN([GCONFIG_FN_PUTENV_S], [AC_CACHE_CHECK([for putenv_s],[gconfig_cv_putenv_s],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#endif]
+			[#include <stdlib.h>]
+		],
+		[
+			[_putenv_s( "name" , "value" ) ;]
+		])],
+		gconfig_cv_putenv_s=yes ,
+		gconfig_cv_putenv_s=no )
+])
+	if test "$gconfig_cv_putenv_s" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_PUTENV_S,1,[Define true if putenv_s in stdlib.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_PUTENV_S,0,[Define true if putenv_s in stdlib.h])
+	fi
+])
+m4trace:m4/acinclude.m4:1569: -1- AC_DEFUN([GCONFIG_FN_QT], [
+	# try pkg-config -- this says 'checking for QT'
+	PKG_CHECK_MODULES([QT],[Qt5Widgets > 5],
+		[
+			gconfig_pkgconfig_qt=yes
+		],
+		[
+			gconfig_pkgconfig_qt=no
+			AC_MSG_NOTICE([no QT 5 pkg-config])
+		]
+	)
+
+	# allow the moc command to be defined with QT_MOC on the configure
+	# command-line, typically also with CXXFLAGS and LIBS pointing to Qt
+	# headers and libraries
+	AC_ARG_VAR([QT_MOC],[moc command for QT])
+
+	if echo "$QT_MOC" | grep -q /
+	then
+		QT_LRELEASE="`dirname \"$QT_MOC\"`/lrelease"
+	else
+		QT_LRELEASE="lrelease"
+	fi
+
+	# or build the moc command using pkg-config results
+	if test "$QT_MOC" = ""
+	then
+		if test "$gconfig_pkgconfig_qt" = "yes"
+		then
+			QT_MOC="`$PKG_CONFIG --variable=host_bins Qt5Core`/moc"
+			QT_LRELEASE="`$PKG_CONFIG --variable=host_bins Qt5Core`/lrelease"
+			QT_CHOOSER="`$PKG_CONFIG --variable=exec_prefix Qt5Core`/bin/qtchooser"
+			if test -x "$QT_MOC" ; then : ; else QT_MOC="" ; fi
+			if test -x "$QT_LRELEASE" ; then : ; else QT_LRELEASE="" ; fi
+			if test -x "$QT_CHOOSER" ; then : ; else QT_CHOOSER="" ; fi
+			if test "$QT_MOC" = "" -a "$QT_CHOOSER" != ""
+			then
+				QT_MOC="$QT_CHOOSER -run-tool=moc -qt=qt5"
+			fi
+			if test "$QT_LRELEASE" = "" -a "$QT_CHOOSER" != ""
+			then
+				QT_LRELEASE="$QT_CHOOSER -run-tool=lrelease -qt=qt5"
+			fi
+		fi
+	fi
+
+	# or find moc on the path
+	if test "$QT_MOC" = ""
+	then
+		AC_PATH_PROG([QT_MOC],[moc])
+	fi
+
+	if test "$QT_LRELEASE" = ""
+	then
+		AC_PATH_PROG([QT_LRELEASE],[lrelease])
+		if test "$QT_LRELEASE" = ""
+		then
+			QT_LRELEASE=false
+		fi
+	fi
+
+	if test "$QT_MOC" != ""
+	then
+		AC_MSG_NOTICE([QT moc command: $QT_MOC])
+	fi
+
+	# set gconfig_have_qt, QT_CFLAGS and QT_LIBS iff we have a moc command
+	if test "$QT_MOC" != ""
+	then
+		gconfig_have_qt="yes"
+		if test "$gconfig_pkgconfig_qt" = "yes"
+		then
+			QT_CFLAGS="-fPIC `$PKG_CONFIG --cflags Qt5Widgets`"
+			QT_LIBS="`$PKG_CONFIG --libs Qt5Widgets`"
+		else
+			QT_CFLAGS="-fPIC"
+			QT_LIBS=""
+		fi
+	else
+		gconfig_have_qt="no"
+	fi
+
+	# mac modifications
+	if test "$QT_MOC" != "" -a "`uname`" = "Darwin"
+	then
+		QT_DIR="`dirname $QT_MOC`/.."
+		QT_CFLAGS="-F $QT_DIR/lib"
+		QT_LIBS="-F $QT_DIR/lib -framework QtWidgets -framework QtGui -framework QtCore"
+	fi
+])
+m4trace:m4/acinclude.m4:1666: -1- AC_DEFUN([GCONFIG_FN_QT_BUILD], [AC_CACHE_CHECK([for QT compilation],[gconfig_cv_qt_build],
+[
+	if test "$gconfig_have_qt" = "yes"
+	then
+		gconfig_save_LIBS="$LIBS"
+		gconfig_save_CXXFLAGS="$CXXFLAGS"
+		LIBS="$LIBS $QT_LIBS"
+		CXXFLAGS="$CXXFLAGS $QT_CFLAGS"
+		AC_LINK_IFELSE([AC_LANG_PROGRAM(
+			[
+				[#include <QtCore/QtCore>]
+				[#if QT_VERSION < 0x050000]
+				[#error Qt is too old]
+				[#endif]
+				[#include <QtGui/QtGui>]
+				[#include <QtWidgets/QtWidgets>]
+				[#include <QtCore/QtPlugin>]
+			],
+			[
+				[throw QSize(1,1).width() ;]
+			])],
+			gconfig_cv_qt_build=yes ,
+			gconfig_cv_qt_build=no )
+		LIBS="$gconfig_save_LIBS"
+		CXXFLAGS="$gconfig_save_CXXFLAGS"
+	else
+		gconfig_cv_qt_build=no
+	fi
+])
+	gconfig_qt_build="$gconfig_cv_qt_build"
+])
+m4trace:m4/acinclude.m4:1703: -1- AC_DEFUN([GCONFIG_FN_READLINK], [AC_CACHE_CHECK([for readlink],[gconfig_cv_readlink],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <unistd.h>]
+			[long n = 0 ;]
+			[char buf[10] ;]
+		],
+		[
+			[n = readlink( "foo" , buf , sizeof(buf) ) ;]
+		])],
+		gconfig_cv_readlink=yes ,
+		gconfig_cv_readlink=no )
+])
+	if test "$gconfig_cv_readlink" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_READLINK,1,[Define true if have readlink() in unistd.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_READLINK,0,[Define true if have readlink() in unistd.h])
+	fi
+])
+m4trace:m4/acinclude.m4:1729: -1- AC_DEFUN([GCONFIG_FN_RTNETLINK], [AC_CACHE_CHECK([for rtnetlink],[gconfig_cv_rtnetlink],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <asm/types.h>]
+			[#include <sys/socket.h>]
+			[#include <linux/netlink.h>]
+			[#include <linux/rtnetlink.h>]
+			[int protocol = 0 ;]
+			[struct sockaddr_nl sa ;]
+		] ,
+		[
+			[protocol = NETLINK_ROUTE ;]
+			[sa.nl_family = AF_NETLINK ;]
+			[sa.nl_groups = RTMGRP_LINK | RTMGRP_IPV4_IFADDR | RTMGRP_IPV6_IFADDR ;]
+		])] ,
+		[gconfig_cv_rtnetlink=yes],
+		[gconfig_cv_rtnetlink=no])
+])
+	if test "$gconfig_cv_rtnetlink" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_RTNETLINK,1,[Define true to enable use of linux rtnetlink])
+	else
+		AC_DEFINE(GCONFIG_HAVE_RTNETLINK,0,[Define true to enable use of linux rtnetlink])
+		if test "`uname`" = "Linux" ; then
+			gconfig_warnings="$gconfig_warnings rtnetlink_network_interface_event_notification"
+		fi
+	fi
+])
+m4trace:m4/acinclude.m4:1763: -1- AC_DEFUN([GCONFIG_FN_SEARCHLIBS_NAMESERVICE], [
+	AC_SEARCH_LIBS([gethostbyname],[nsl],[gconfig_have_libnsl=yes],[gconfig_have_libnsl=no])
+])
+m4trace:m4/acinclude.m4:1771: -1- AC_DEFUN([GCONFIG_FN_SEARCHLIBS_SOCKET], [
+	AC_SEARCH_LIBS([connect],[socket],[gconfig_have_libsocket=yes],[gconfig_have_libsocket=no])
+])
+m4trace:m4/acinclude.m4:1782: -1- AC_DEFUN([GCONFIG_FN_SET_DIRECTORIES_E], [
+	if test "$e_libexecdir" = ""
+	then
+		e_libexecdir="$libexecdir/$PACKAGE"
+	fi
+	if test "$e_examplesdir" = ""
+	then
+		e_examplesdir="$libexecdir/$PACKAGE/examples"
+	fi
+	if test "$e_sysconfdir" = ""
+	then
+		e_sysconfdir="$sysconfdir"
+	fi
+	if test "$e_docdir" = ""
+	then
+		e_docdir="$docdir"
+		if test "$e_docdir" = ""
+		then
+			e_docdir="$datadir/$PACKAGE/doc"
+		fi
+	fi
+	if test "$e_spooldir" = ""
+	then
+		e_spooldir="$localstatedir/spool/$PACKAGE"
+	fi
+	if test "$e_pamdir" = ""
+	then
+		e_pamdir="$sysconfdir/pam.d"
+	fi
+	if test "$e_initdir" = ""
+	then
+		e_initdir="$libexecdir/$PACKAGE/init"
+	fi
+	if test "$e_bsdinitdir" = ""
+	then
+		if test "$gconfig_bsd" = "yes"
+		then
+			e_bsdinitdir="$sysconfdir/rc.d"
+		else
+			e_bsdinitdir="$libexecdir/$PACKAGE/init/bsd"
+		fi
+	fi
+	if test "$e_icondir" = ""
+	then
+		e_icondir="$datadir/$PACKAGE"
+	fi
+	if test "$e_trdir" = ""
+	then
+		e_trdir="$datadir/$PACKAGE"
+	fi
+	if test "$e_rundir" = ""
+	then
+		# (linux fhs says "/run", not "/var/run")
+		e_rundir="/run/$PACKAGE"
+	fi
+	if test "$e_systemddir" = ""
+	then
+		# keep as an example file by default - installed fully by rpm and deb
+		e_systemddir="$e_examplesdir"
+		#e_systemddir="$libdir/systemd/system"
+	fi
+
+	AC_SUBST([e_docdir])
+	AC_SUBST([e_initdir])
+	AC_SUBST([e_bsdinitdir])
+	AC_SUBST([e_icondir])
+	AC_SUBST([e_trdir])
+	AC_SUBST([e_spooldir])
+	AC_SUBST([e_examplesdir])
+	AC_SUBST([e_libexecdir])
+	AC_SUBST([e_pamdir])
+	AC_SUBST([e_sysconfdir])
+	AC_SUBST([e_rundir])
+	AC_SUBST([e_systemddir])
+])
+m4trace:m4/acinclude.m4:1863: -1- AC_DEFUN([GCONFIG_FN_SETGROUPS], [AC_CACHE_CHECK([for setgroups],[gconfig_cv_setgroups],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <unistd.h>]
+			[#include <grp.h>]
+		],
+		[
+			[setgroups(0,0) ;]
+		])],
+		gconfig_cv_setgroups=yes ,
+		gconfig_cv_setgroups=no )
+])
+	if test "$gconfig_cv_setgroups" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SETGROUPS,1,[Define true if setgroups is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SETGROUPS,0,[Define true if setgroups is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1889: -1- AC_DEFUN([GCONFIG_FN_SETPGRP_BSD], [AC_CACHE_CHECK([for bsd setpgrp],[gconfig_cv_setpgrp_bsd],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <unistd.h>]
+		],
+		[
+			[setpgrp(0,0) ;]
+		])],
+		gconfig_cv_setpgrp_bsd=yes ,
+		gconfig_cv_setpgrp_bsd=no )
+])
+	if test "$gconfig_cv_setpgrp_bsd" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SETPGRP_BSD,1,[Define true if setpgrp has two parameters])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SETPGRP_BSD,0,[Define true if setpgrp has two parameters])
+	fi
+])
+m4trace:m4/acinclude.m4:1914: -1- AC_DEFUN([GCONFIG_FN_SIGPROCMASK], [AC_CACHE_CHECK([for sigprocmask],[gconfig_cv_sigprocmask],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <csignal>]
+			[#include <cstddef>]
+			[sigset_t set ;]
+			[int rc ;]
+		],
+		[
+			[sigemptyset( &set ) ;]
+			[sigaddset( &set , SIGTERM ) ;]
+			[rc = sigprocmask( SIG_BLOCK|SIG_UNBLOCK|SIG_SETMASK , &set , NULL ) ;]
+		])],
+		gconfig_cv_sigprocmask=yes ,
+		gconfig_cv_sigprocmask=no )
+])
+	if test "$gconfig_cv_sigprocmask" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SIGPROCMASK,1,[Define true if sigprocmask() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SIGPROCMASK,0,[Define true if sigprocmask() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:1943: -1- AC_DEFUN([GCONFIG_FN_SIN6_LEN], [AC_CACHE_CHECK([for sin6_len],[gconfig_cv_sin6_len],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/socket.h>]
+				[#include <netinet/in.h>]
+			[#endif]
+			[struct sockaddr_in6 s ;]
+		],
+		[
+			[ s.sin6_len = 1;]
+		])],
+		gconfig_cv_sin6_len=yes ,
+		gconfig_cv_sin6_len=no )
+])
+	if test "$gconfig_cv_sin6_len" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SIN6_LEN,1,[Define true if sockaddr_in6 has a sin6_len member])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SIN6_LEN,0,[Define true if sockaddr_in6 has a sin6_len member])
+	fi
+])
+m4trace:m4/acinclude.m4:1976: -1- AC_DEFUN([GCONFIG_FN_SOPEN], [AC_CACHE_CHECK([for _sopen()],[gconfig_cv_sopen],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <io.h>]
+			[#include <share.h>]
+			[#include <fcntl.h>]
+			[int fd = 0 ;]
+		],
+		[
+			[fd = _sopen("foo",_O_WRONLY,_SH_DENYNO) ;]
+		])],
+		gconfig_cv_sopen=yes ,
+		gconfig_cv_sopen=no )
+])
+	if test "$gconfig_cv_sopen" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SOPEN,1,[Define true if _sopen() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SOPEN,0,[Define true if _sopen() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:2003: -1- AC_DEFUN([GCONFIG_FN_SOPEN_S], [AC_CACHE_CHECK([for _sopen_s()],[gconfig_cv_sopen_s],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <io.h>]
+			[#include <share.h>]
+			[#include <fcntl.h>]
+			[#include <sys/stat.h>]
+			[int fd = 0 ;]
+		],
+		[
+			[errno_t e = _sopen_s(&fd,"foo",_O_WRONLY,_SH_DENYNO,_S_IWRITE) ;]
+		])],
+		gconfig_cv_sopen_s=yes ,
+		gconfig_cv_sopen_s=no )
+])
+	if test "$gconfig_cv_sopen_s" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SOPEN_S,1,[Define true if _sopen_s() is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SOPEN_S,0,[Define true if _sopen_s() is available])
+	fi
+])
+m4trace:m4/acinclude.m4:2031: -1- AC_DEFUN([GCONFIG_FN_STATBUF_TIMESPEC], [AC_CACHE_CHECK([for statbuf timespec],[gconfig_cv_statbuf_timespec],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+				[#include <sys/types.h>]
+				[#include <sys/stat.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/stat.h>]
+				[#include <unistd.h>]
+			[#endif]
+			[struct stat statbuf ;]
+		],
+		[
+			[statbuf.st_mtimespec.tv_sec = 0 ;]
+			[statbuf.st_mtimespec.tv_nsec = 0 ;]
+		])],
+		gconfig_cv_statbuf_timespec=yes ,
+		gconfig_cv_statbuf_timespec=no )
+])
+	if test "$gconfig_cv_statbuf_timespec" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_STATBUF_TIMESPEC,1,[Define true if statbuf has a st_atimespec member])
+	else
+		AC_DEFINE(GCONFIG_HAVE_STATBUF_TIMESPEC,0,[Define true if statbuf has a st_atimespec member])
+	fi
+])
+m4trace:m4/acinclude.m4:2067: -1- AC_DEFUN([GCONFIG_FN_STATBUF_NSEC], [AC_CACHE_CHECK([for statbuf nanoseconds],[gconfig_cv_statbuf_nsec],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+				[#include <sys/types.h>]
+				[#include <sys/stat.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/stat.h>]
+				[#include <unistd.h>]
+			[#endif]
+			[struct stat statbuf ;]
+		],
+		[
+			[statbuf.st_atim.tv_nsec = 0 ;]
+		])],
+		gconfig_cv_statbuf_nsec=yes ,
+		gconfig_cv_statbuf_nsec=no )
+])
+	if test "$gconfig_cv_statbuf_nsec" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_STATBUF_NSEC,1,[Define true if statbuf has a st_atim.tv_nsec member])
+	else
+		AC_DEFINE(GCONFIG_HAVE_STATBUF_NSEC,0,[Define true if statbuf has a st_atim.tv_nsec member])
+	fi
+])
+m4trace:m4/acinclude.m4:2102: -1- AC_DEFUN([GCONFIG_FN_STRNCPY_S], [AC_CACHE_CHECK([for strncpy_s],[gconfig_cv_strncpy_s],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#endif]
+			[#include <string.h>]
+			[char buffer[100] ;]
+		],
+		[
+			[strncpy_s( buffer , sizeof(buffer) , "foo" , 3U ) ;]
+		])],
+		gconfig_cv_strncpy_s=yes ,
+		gconfig_cv_strncpy_s=no )
+])
+	if test "$gconfig_cv_strncpy_s" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_STRNCPY_S,1,[Define true if strncpy_s in string.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_STRNCPY_S,0,[Define true if strncpy_s in string.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2132: -1- AC_DEFUN([GCONFIG_FN_WINDOWS_CREATE_EVENT_EX], [AC_CACHE_CHECK([for windows CreateEventEx],[gconfig_cv_win_ce_ex],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <synchapi.h>]
+			[#endif]
+			[HANDLE h = 0 ;]
+		],
+		[
+			[h = CreateEventEx( NULL , NULL , 0 , 0 ) ;]
+		])],
+		gconfig_cv_win_ce_ex=yes,
+		gconfig_cv_win_ce_ex=no )
+])
+	if test "$gconfig_cv_win_ce_ex" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_WINDOWS_CREATE_EVENT_EX,1,[Define true if windows CreateEventEx is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_WINDOWS_CREATE_EVENT_EX,0,[Define true if windows CreateEventEx is available])
+	fi
+])
+m4trace:m4/acinclude.m4:2161: -1- AC_DEFUN([GCONFIG_FN_WINDOWS_CREATE_WAITABLE_TIMER_EX], [AC_CACHE_CHECK([for windows CreateWaitableTimerEx],[gconfig_cv_win_cwt_ex],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#endif]
+			[HANDLE h = 0 ;]
+		],
+		[
+			[h = CreateWaitableTimerEx( NULL , NULL , 0 , 0 ) ;]
+		])],
+		gconfig_cv_win_cwt_ex=yes,
+		gconfig_cv_win_cwt_ex=no )
+])
+	if test "$gconfig_cv_win_cwt_ex" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_WINDOWS_CREATE_WAITABLE_TIMER_EX,1,[Define true if windows CreateWaitableTimerEx is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_WINDOWS_CREATE_WAITABLE_TIMER_EX,0,[Define true if windows CreateWaitableTimerEx is available])
+	fi
+])
+m4trace:m4/acinclude.m4:2190: -1- AC_DEFUN([GCONFIG_FN_WINDOWS_INIT_COMMON_CONTROLS_EX], [AC_CACHE_CHECK([for windows InitCommonControlsEx],[gconfig_cv_win_icc_ex],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <commctrl.h>]
+			[#endif]
+			[INITCOMMONCONTROLSEX x ;]
+			[BOOL rc = 0;]
+		],
+		[
+			[rc = InitCommonControlsEx( &x ) ;]
+		])],
+		gconfig_cv_win_icc_ex=yes,
+		gconfig_cv_win_icc_ex=no )
+])
+	if test "$gconfig_cv_win_icc_ex" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_WINDOWS_INIT_COMMON_CONTROLS_EX,1,[Define true if windows InitCommonControlsEx is available])
+	else
+		AC_DEFINE(GCONFIG_HAVE_WINDOWS_INIT_COMMON_CONTROLS_EX,0,[Define true if windows InitCommonControlsEx is available])
+	fi
+])
+m4trace:m4/acinclude.m4:2221: -1- AC_DEFUN([GCONFIG_FN_TLS], [
+	if test "$with_openssl" = "yes" -a "$gconfig_cv_ssl_openssl" = "no"
+	then
+		AC_MSG_ERROR([cannot use --with-openssl: openssl is not available: check config.log and try setting CPPFLAGS])
+	fi
+	if test "$with_openssl" != "no" -a "$gconfig_cv_ssl_openssl" = "yes"
+	then
+		gconfig_ssl_use_openssl=yes
+	else
+		gconfig_ssl_use_openssl=no
+	fi
+
+	if test "$with_mbedtls" = "yes" -a "$gconfig_cv_ssl_mbedtls" = "no"
+	then
+		AC_MSG_ERROR([cannot use --with-mbedtls: mbedtls is not available: check config.log and try setting CPPFLAGS])
+	fi
+	if test "$with_mbedtls" != "no" -a "$gconfig_cv_ssl_mbedtls" = "yes"
+	then
+		gconfig_ssl_use_mbedtls=yes
+	else
+		gconfig_ssl_use_mbedtls=no
+	fi
+
+	if test "$gconfig_ssl_use_openssl" = "yes" -a "$gconfig_ssl_use_mbedtls" = "yes"
+	then
+		gconfig_ssl_notice="openssl and mbedtls"
+		gconfig_ssl_use_none=no
+		gconfig_ssl_use_both=yes
+		gconfig_ssl_use_openssl_only=no
+		gconfig_ssl_use_mbedtls_only=no
+		GCONFIG_TLS_LIBS="$gconfig_ssl_mbedtls_libs $gconfig_ssl_openssl_libs"
+	fi
+	if test "$gconfig_ssl_use_openssl" = "yes" -a "$gconfig_ssl_use_mbedtls" = "no"
+	then
+		gconfig_ssl_notice="openssl"
+		gconfig_ssl_use_none=no
+		gconfig_ssl_use_both=no
+		gconfig_ssl_use_openssl_only=yes
+		gconfig_ssl_use_mbedtls_only=no
+		GCONFIG_TLS_LIBS="$gconfig_ssl_openssl_libs"
+	fi
+	if test "$gconfig_ssl_use_openssl" = "no" -a "$gconfig_ssl_use_mbedtls" = "yes"
+	then
+		gconfig_ssl_notice="mbedtls"
+		gconfig_ssl_use_none=no
+		gconfig_ssl_use_both=no
+		gconfig_ssl_use_openssl_only=no
+		gconfig_ssl_use_mbedtls_only=yes
+		GCONFIG_TLS_LIBS="$gconfig_ssl_mbedtls_libs"
+	fi
+	if test "$gconfig_ssl_use_openssl" = "no" -a "$gconfig_ssl_use_mbedtls" = "no"
+	then
+		gconfig_ssl_notice="none"
+		gconfig_ssl_use_none=yes
+		gconfig_ssl_use_both=no
+		gconfig_ssl_use_openssl_only=no
+		gconfig_ssl_use_mbedtls_only=no
+		GCONFIG_TLS_LIBS=""
+	fi
+
+	if test "$gconfig_ssl_use_none" = "yes" -a "$with_openssl" != "no"
+	then
+		gconfig_warnings="$gconfig_warnings openssl/mbedtls_transport_layer_security"
+	fi
+
+	AC_SUBST([GCONFIG_TLS_LIBS])
+	AM_CONDITIONAL([GCONFIG_TLS_USE_BOTH],test "$gconfig_ssl_use_both" = "yes")
+	AM_CONDITIONAL([GCONFIG_TLS_USE_OPENSSL],test "$gconfig_ssl_use_openssl_only" = "yes")
+	AM_CONDITIONAL([GCONFIG_TLS_USE_MBEDTLS],test "$gconfig_ssl_use_mbedtls_only" = "yes")
+	AM_CONDITIONAL([GCONFIG_TLS_USE_NONE],test "$gconfig_ssl_use_none" = "yes")
+	AC_MSG_NOTICE([using tls library: $gconfig_ssl_notice])
+])
+m4trace:m4/acinclude.m4:2299: -1- AC_DEFUN([GCONFIG_FN_TLS_MBEDTLS], [AC_CACHE_CHECK([for mbedtls],[gconfig_cv_ssl_mbedtls],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <mbedtls/ssl.h>]
+			[mbedtls_ssl_context * p = 0 ;]
+		],
+		[
+		])],
+		gconfig_cv_ssl_mbedtls=yes,
+		gconfig_cv_ssl_mbedtls=no )
+])
+
+	if test "$gconfig_cv_ssl_mbedtls" = "yes"
+	then
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <mbedtls/net.h>]
+			[int x = MBEDTLS_ERR_NET_RECV_FAILED;]
+		],
+		[
+		])],
+		gconfig_ssl_mbedtls_net_h=yes,
+		gconfig_ssl_mbedtls_net_h=no )
+
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <mbedtls/net_sockets.h>]
+			[int x = MBEDTLS_ERR_NET_RECV_FAILED;]
+		],
+		[
+		])],
+		gconfig_ssl_mbedtls_net_sockets_h=yes,
+		gconfig_ssl_mbedtls_net_sockets_h=no )
+	fi
+
+	if test "$gconfig_cv_ssl_mbedtls" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_MBEDTLS,1,[Define true to enable mbedtls])
+		gconfig_ssl_mbedtls_libs="-lmbedtls -lmbedx509 -lmbedcrypto"
+	else
+		AC_DEFINE(GCONFIG_HAVE_MBEDTLS,0,[Define true to enable mbedtls])
+		gconfig_ssl_mbedtls_libs=""
+	fi
+
+	if test "$gconfig_ssl_mbedtls_net_h" = "yes" -a "$gconfig_ssl_mbedtls_net_sockets_h" = "no" ; then
+		AC_DEFINE(GCONFIG_HAVE_MBEDTLS_NET_H,1,[Define true to use deprecated mbedtls/net.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_MBEDTLS_NET_H,0,[Define true to use deprecated mbedtls/net.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2355: -1- AC_DEFUN([GCONFIG_FN_TLS_OPENSSL], [AC_CACHE_CHECK([for openssl],[gconfig_cv_ssl_openssl],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <openssl/ssl.h>]
+			[SSL_CTX * p = 0 ;]
+		],
+		[
+		])],
+		gconfig_cv_ssl_openssl=yes,
+		gconfig_cv_ssl_openssl=no )
+])
+	if test "$gconfig_cv_ssl_openssl" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_OPENSSL,1,[Define true to enable openssl])
+		gconfig_ssl_openssl_libs="-lssl -lcrypto"
+	else
+		AC_DEFINE(GCONFIG_HAVE_OPENSSL,0,[Define true to enable openssl])
+		gconfig_ssl_openssl_libs=""
+	fi
+
+	if test "$gconfig_cv_ssl_openssl" = "yes"
+	then
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[[#include <openssl/ssl.h>]],
+		[[TLS_method();]])],
+		gconfig_ssl_openssl_tls_method=yes,
+		gconfig_ssl_openssl_tls_method=no )
+
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[[#include <openssl/ssl.h>]],
+		[[SSL_set_min_proto_version((SSL*)0,0);]])],
+		gconfig_ssl_openssl_min_max=yes,
+		gconfig_ssl_openssl_min_max=no )
+	else
+		gconfig_ssl_openssl_tls_method=no
+		gconfig_ssl_openssl_min_max=no
+	fi
+
+	if test "$gconfig_ssl_openssl_tls_method" = "yes"
+	then
+		AC_DEFINE(GCONFIG_HAVE_OPENSSL_TLS_METHOD,1,[Define true if openssl has TLS_method])
+	else
+		AC_DEFINE(GCONFIG_HAVE_OPENSSL_TLS_METHOD,0,[Define true if openssl has TLS_method])
+	fi
+	if test "$gconfig_ssl_openssl_min_max" = "yes"
+	then
+		AC_DEFINE(GCONFIG_HAVE_OPENSSL_MIN_MAX,1,[Define true if openssl has SSL_set_min_proto_version])
+	else
+		AC_DEFINE(GCONFIG_HAVE_OPENSSL_MIN_MAX,0,[Define true if openssl has SSL_set_min_proto_version])
+	fi
+])
+m4trace:m4/acinclude.m4:2412: -1- AC_DEFUN([GCONFIG_FN_TYPE_ERRNO_T], [AC_CACHE_CHECK([for errno_t],[gconfig_cv_type_errno_t],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <error.h>]
+			[errno_t e = 42 ;]
+		],
+		[
+		])],
+		gconfig_cv_type_errno_t=yes,
+		gconfig_cv_type_errno_t=no )
+])
+	if test "$gconfig_cv_type_errno_t" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_ERRNO_T,1,[Define true if errno_t type definition in error.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_ERRNO_T,0,[Define true if errno_t type definition in error.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2436: -1- AC_DEFUN([GCONFIG_FN_TYPE_INT16], [AC_CACHE_CHECK([for 'int16'],[gconfig_cv_int16],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifndef _WIN32]
+			[#include <stdint.h>]
+			[int16_t n = 0 ;]
+			[uint16_t m = 0U ;]
+			[#endif]
+		] ,
+		[
+		])],
+		gconfig_cv_int16=yes ,
+		gconfig_cv_int16=no )
+])
+	if test "$gconfig_cv_int16" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_INT16,1,[Define true if compiler has int16_t in stdint.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_INT16,0,[Define true if compiler has int16_t in stdint.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2463: -1- AC_DEFUN([GCONFIG_FN_TYPE_INT32], [AC_CACHE_CHECK([for 'int32'],[gconfig_cv_int32],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifndef _WIN32]
+			[#include <stdint.h>]
+			[int32_t n = 0 ;]
+			[uint32_t m = 0U ;]
+			[#endif]
+		] ,
+		[
+		])],
+		gconfig_cv_int32=yes ,
+		gconfig_cv_int32=no )
+])
+	if test "$gconfig_cv_int32" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_INT32,1,[Define true if compiler has int32_t in stdint.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_INT32,0,[Define true if compiler has int32_t in stdint.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2490: -1- AC_DEFUN([GCONFIG_FN_TYPE_INT64], [AC_CACHE_CHECK([for 'int64'],[gconfig_cv_int64],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+			[#include <windows.h>]
+			[INT64 n = 0 ;]
+			[UINT64 m = 0U ;]
+			[#else]
+			[#include <stdint.h>]
+			[int64_t n = 0 ;]
+			[uint64_t m = 0U ;]
+			[#endif]
+		] ,
+		[
+		])],
+		gconfig_cv_int64=yes ,
+		gconfig_cv_int64=no )
+])
+	if test "$gconfig_cv_int64" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_INT64,1,[Define true if compiler has int64_t in stdint.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_INT64,0,[Define true if compiler has int64_t in stdint.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2521: -1- AC_DEFUN([GCONFIG_FN_TYPE_SOCKLEN_T], [AC_CACHE_CHECK([for socklen_t],[gconfig_cv_type_socklen_t],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#ifdef _WIN32]
+				[#include <winsock2.h>]
+				[#include <windows.h>]
+				[#include <ws2tcpip.h>]
+			[#else]
+				[#include <sys/types.h>]
+				[#include <sys/socket.h>]
+			[#endif]
+			[socklen_t len = 42 ;]
+		],
+		[
+			[len++ ;]
+		])],
+		gconfig_cv_type_socklen_t=yes,
+		gconfig_cv_type_socklen_t=no )
+])
+	if test "$gconfig_cv_type_socklen_t" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SOCKLEN_T,1,[Define true if socklen_t type definition in sys/socket.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SOCKLEN_T,0,[Define true if socklen_t type definition in sys/socket.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2553: -1- AC_DEFUN([GCONFIG_FN_TYPE_SSIZE_T], [AC_CACHE_CHECK([for ssize_t],[gconfig_cv_type_ssize_t],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <stdio.h>]
+			[ssize_t e = 42 ;]
+		],
+		[
+		])],
+		gconfig_cv_type_ssize_t=yes,
+		gconfig_cv_type_ssize_t=no )
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <unistd.h>]
+			[ssize_t e = 42 ;]
+		],
+		[
+		])],
+		gconfig_cv_type_ssize_t=yes )
+])
+	if test "$gconfig_cv_type_ssize_t" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_SSIZE_T,1,[Define true if ssize_t type is defined])
+	else
+		AC_DEFINE(GCONFIG_HAVE_SSIZE_T,0,[Define true if ssize_t type is defined])
+	fi
+])
+m4trace:m4/acinclude.m4:2586: -1- AC_DEFUN([GCONFIG_FN_TYPE_UINTPTR_T], [AC_CACHE_CHECK([for uintptr_t],[gconfig_cv_type_uintptr_t],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <stdint.h>]
+			[uintptr_t x = 0 ;]
+		],
+		[
+		])],
+		gconfig_cv_type_uintptr_t=yes,
+		gconfig_cv_type_uintptr_t=no )
+])
+	if test "$gconfig_cv_type_uintptr_t" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_UINTPTR_T,1,[Define true if uintptr_t type is defined stdint.h])
+	else
+		AC_DEFINE(GCONFIG_HAVE_UINTPTR_T,0,[Define true if uintptr_t type is defined stdint.h])
+	fi
+])
+m4trace:m4/acinclude.m4:2610: -1- AC_DEFUN([GCONFIG_FN_UDS], [AC_CACHE_CHECK([for unix domain sockets],[gconfig_cv_uds],
+[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[
+			[#include <sys/types.h>]
+			[#include <sys/socket.h>]
+			[#include <sys/un.h>]
+			[struct sockaddr_un a ;]
+		] ,
+		[
+			[a.sun_family = AF_UNIX | PF_UNIX ;]
+			[a.sun_path[0] = '\0' ;]
+		])] ,
+		[gconfig_cv_uds=yes],
+		[gconfig_cv_uds=no])
+])
+	if test "$gconfig_cv_uds" = "yes"
+	then
+		AC_DEFINE(GCONFIG_HAVE_UDS,1,[Define true to use unix domain sockets])
+	else
+		AC_DEFINE(GCONFIG_HAVE_UDS,0,[Define true to use unix domain sockets])
+	fi
+])
+m4trace:m4/acinclude.m4:2639: -1- AC_DEFUN([GCONFIG_FN_WARNINGS], [
+	for gconfig_w in $gconfig_warnings ""
+	do
+		if test "$gconfig_w" != ""
+		then
+			echo "$gconfig_w" | sed 's/_/ /g' | while read gconfig_what gconfig_stuff
+			do
+				AC_MSG_WARN([missing $gconfig_what - no support for $gconfig_stuff])
+			done
+		fi
+	done
+])
+m4trace:m4/acinclude.m4:2658: -1- AC_DEFUN([GCONFIG_FN_WITH_DOXYGEN], [
+	if test "$with_doxygen" != ""
+	then
+		if test "$with_doxygen" = "yes" -a "$GCONFIG_HAVE_DOXYGEN" != "yes"
+		then
+			AC_MSG_WARN([forcing use of doxygen even though not found])
+		fi
+		GCONFIG_HAVE_DOXYGEN="$with_doxygen"
+	fi
+	AC_SUBST([GCONFIG_HAVE_DOXYGEN])
+])
+m4trace:m4/acinclude.m4:2679: -1- AC_DEFUN([GCONFIG_FN_WITH_GETTEXT], [
+	if test "$with_gettext" = "no"
+	then
+		gconfig_cv_gettext="no"
+	:
+	elif test "$with_gettext" = "yes"
+	then
+		if test "$gconfig_cv_gettext" = "no"
+		then
+			AC_MSG_WARN([forcing use of gettext even though not detected])
+			gconfig_cv_gettext="yes"
+		fi
+	fi
+
+	if test "$gconfig_cv_gettext" = "yes" ; then
+		AC_DEFINE(GCONFIG_HAVE_GETTEXT,1,[Define true to use gettext])
+	else
+		AC_DEFINE(GCONFIG_HAVE_GETTEXT,0,[Define true to use gettext])
+	fi
+	AM_CONDITIONAL([GCONFIG_GETTEXT],[test "$gconfig_cv_gettext" = "yes"])
+])
+m4trace:m4/acinclude.m4:2707: -1- AC_DEFUN([GCONFIG_FN_WITH_MAN2HTML], [
+	if test "$with_man2html" != ""
+	then
+		if test "$with_man2html" = "yes" -a "$GCONFIG_HAVE_MAN2HTML" != "yes"
+		then
+			AC_MSG_WARN([forcing use of man2html even though not found])
+		fi
+		GCONFIG_HAVE_MAN2HTML="$with_man2html"
+	fi
+	AC_SUBST([GCONFIG_HAVE_MAN2HTML])
+])
+m4trace:m4/acinclude.m4:2724: -1- AC_DEFUN([GCONFIG_FN_WITH_PAM], [
+	AC_REQUIRE([GCONFIG_FN_PAM])
+	AC_REQUIRE([GCONFIG_FN_PAM_CONST])
+
+	if test "$with_pam" = "no"
+	then
+		gconfig_use_pam="no"
+	else
+
+		AC_SEARCH_LIBS([pam_end],[pam],[gconfig_have_libpam=yes],[gconfig_have_libpam=no])
+
+		gconfig_pam_compiles="no"
+		if test "$gconfig_cv_pam_in_security" = "yes" -o "$gconfig_cv_pam_in_pam" = "yes" -o "$gconfig_cv_pam_in_include" = "yes"
+		then
+			gconfig_pam_compiles="yes"
+		fi
+
+		if test "$with_pam" = "yes" -a "$gconfig_pam_compiles" = "no"
+		then
+			AC_MSG_WARN([forcing use of pam even though it does not seem to compile])
+		fi
+
+		gconfig_use_pam="$with_pam"
+		if test "$with_pam" = "" -a "$gconfig_pam_compiles" = "yes"
+		then
+			gconfig_use_pam="yes"
+		fi
+	fi
+
+	if test "$gconfig_pam_compiles" != "yes" -a "$with_pam" != "no"
+	then
+		gconfig_warnings="$gconfig_warnings pam_pam_authentication"
+	fi
+
+	if test "$gconfig_use_pam" = "yes"
+	then
+		AC_DEFINE(GCONFIG_HAVE_PAM,1,[Define true to use pam])
+	else
+		AC_DEFINE(GCONFIG_HAVE_PAM,0,[Define true to use pam])
+	fi
+	AM_CONDITIONAL([GCONFIG_PAM],[test "$gconfig_use_pam" = "yes"])
+])
+m4trace:m4/acinclude.m4:2774: -1- AC_DEFUN([GCONFIG_FN_WITH_UDS], [
+	AC_REQUIRE([GCONFIG_FN_UDS])
+	if test "$with_uds" = "no"
+	then
+		AM_CONDITIONAL([GCONFIG_UDS],[false])
+	else
+		if test "$with_uds" = "yes" -a "$gconfig_cv_uds" = "no"
+		then
+			AC_MSG_WARN([forcing use of unix domain sockets even though not detected])
+		fi
+		AM_CONDITIONAL([GCONFIG_UDS],[true])
+	fi
+])
+m4trace:m4/m4_ax_cxx_compile_stdcxx.m4:48: -1- AC_DEFUN([AX_CXX_COMPILE_STDCXX], [dnl
+  m4_if([$1], [11], [ax_cxx_compile_alternatives="11 0x"],
+        [$1], [14], [ax_cxx_compile_alternatives="14 1y"],
+        [$1], [17], [ax_cxx_compile_alternatives="17 1z"],
+        [m4_fatal([invalid first argument `$1' to AX_CXX_COMPILE_STDCXX])])dnl
+  m4_if([$2], [], [],
+        [$2], [ext], [],
+        [$2], [noext], [],
+        [m4_fatal([invalid second argument `$2' to AX_CXX_COMPILE_STDCXX])])dnl
+  m4_if([$3], [], [ax_cxx_compile_cxx$1_required=true],
+        [$3], [mandatory], [ax_cxx_compile_cxx$1_required=true],
+        [$3], [optional], [ax_cxx_compile_cxx$1_required=false],
+        [m4_fatal([invalid third argument `$3' to AX_CXX_COMPILE_STDCXX])])
+  AC_LANG_PUSH([C++])dnl
+  ac_success=no
+
+  m4_if([$2], [noext], [], [dnl
+  if test x$ac_success = xno; then
+    for alternative in ${ax_cxx_compile_alternatives}; do
+      switch="-std=gnu++${alternative}"
+      cachevar=AS_TR_SH([ax_cv_cxx_compile_cxx$1_$switch])
+      AC_CACHE_CHECK(whether $CXX supports C++$1 features with $switch,
+                     $cachevar,
+        [ac_save_CXX="$CXX"
+         CXX="$CXX $switch"
+         AC_COMPILE_IFELSE([AC_LANG_SOURCE([_AX_CXX_COMPILE_STDCXX_testbody_$1])],
+          [eval $cachevar=yes],
+          [eval $cachevar=no])
+         CXX="$ac_save_CXX"])
+      if eval test x\$$cachevar = xyes; then
+        CXX="$CXX $switch"
+        if test -n "$CXXCPP" ; then
+          CXXCPP="$CXXCPP $switch"
+        fi
+        ac_success=yes
+        break
+      fi
+    done
+  fi])
+
+  m4_if([$2], [ext], [], [dnl
+  if test x$ac_success = xno; then
+    dnl HP's aCC needs +std=c++11 according to:
+    dnl http://h21007.www2.hp.com/portal/download/files/unprot/aCxx/PDF_Release_Notes/769149-001.pdf
+    dnl Cray's crayCC needs "-h std=c++11"
+    for alternative in ${ax_cxx_compile_alternatives}; do
+      for switch in -std=c++${alternative} +std=c++${alternative} "-h std=c++${alternative}"; do
+        cachevar=AS_TR_SH([ax_cv_cxx_compile_cxx$1_$switch])
+        AC_CACHE_CHECK(whether $CXX supports C++$1 features with $switch,
+                       $cachevar,
+          [ac_save_CXX="$CXX"
+           CXX="$CXX $switch"
+           AC_COMPILE_IFELSE([AC_LANG_SOURCE([_AX_CXX_COMPILE_STDCXX_testbody_$1])],
+            [eval $cachevar=yes],
+            [eval $cachevar=no])
+           CXX="$ac_save_CXX"])
+        if eval test x\$$cachevar = xyes; then
+          CXX="$CXX $switch"
+          if test -n "$CXXCPP" ; then
+            CXXCPP="$CXXCPP $switch"
+          fi
+          ac_success=yes
+          break
+        fi
+      done
+      if test x$ac_success = xyes; then
+        break
+      fi
+    done
+  fi])
+  AC_LANG_POP([C++])
+  if test x$ax_cxx_compile_cxx$1_required = xtrue; then
+    if test x$ac_success = xno; then
+      AC_MSG_ERROR([*** A compiler with support for C++$1 language features is required.])
+    fi
+  fi
+  if test x$ac_success = xno; then
+    HAVE_CXX$1=0
+    AC_MSG_NOTICE([No compiler with C++$1 support was found])
+  else
+    HAVE_CXX$1=1
+    AC_DEFINE(HAVE_CXX$1,1,
+              [define if the compiler supports basic C++$1 syntax])
+  fi
+  AC_SUBST(HAVE_CXX$1)
+])
+m4trace:m4/m4_ax_cxx_compile_stdcxx_11.m4:39: -1- AC_DEFUN([AX_CXX_COMPILE_STDCXX_11], [AX_CXX_COMPILE_STDCXX([11], [$1], [$2])])
+m4trace:m4/m4_ax_require_defined.m4:35: -1- AC_DEFUN([AX_REQUIRE_DEFINED], [dnl
+  m4_ifndef([$1], [m4_fatal([macro ]$1[ is not defined; is a m4 file missing?])])
+])
+m4trace:m4/pkg.m4:27: -1- AC_DEFUN([PKG_PROG_PKG_CONFIG], [m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
+m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
+AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
+AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
+AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=m4_default([$1], [0.9.0])
+	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		AC_MSG_RESULT([yes])
+	else
+		AC_MSG_RESULT([no])
+		PKG_CONFIG=""
+	fi
+fi[]dnl
+])
+m4trace:m4/pkg.m4:60: -1- AC_DEFUN([PKG_CHECK_EXISTS], [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+if test -n "$PKG_CONFIG" && \
+    AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
+  m4_default([$2], [:])
+m4_ifvaln([$3], [else
+  $3])dnl
+fi])
+m4trace:m4/pkg.m4:86: -1- AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED], [AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi[]dnl
+])
+m4trace:m4/pkg.m4:106: -1- AC_DEFUN([PKG_CHECK_MODULES], [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
+AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
+
+pkg_failed=no
+AC_MSG_CHECKING([for $1])
+
+_PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
+_PKG_CONFIG([$1][_LIBS], [libs], [$2])
+
+m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
+and $1[]_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.])
+
+if test $pkg_failed = yes; then
+   	AC_MSG_RESULT([no])
+        _PKG_SHORT_ERRORS_SUPPORTED
+        if test $_pkg_short_errors_supported = yes; then
+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
+        else 
+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
+
+	m4_default([$4], [AC_MSG_ERROR(
+[Package requirements ($2) were not met:
+
+$$1_PKG_ERRORS
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+_PKG_TEXT])[]dnl
+        ])
+elif test $pkg_failed = untried; then
+     	AC_MSG_RESULT([no])
+	m4_default([$4], [AC_MSG_FAILURE(
+[The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+_PKG_TEXT
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
+        ])
+else
+	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
+	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
+        AC_MSG_RESULT([yes])
+	$3
+fi[]dnl
+])
+m4trace:configure.ac:22: -1- m4_pattern_forbid([^_?A[CHUM]_])
+m4trace:configure.ac:22: -1- m4_pattern_forbid([_AC_])
+m4trace:configure.ac:22: -1- m4_pattern_forbid([^LIBOBJS$], [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^AS_FLAGS$])
+m4trace:configure.ac:22: -1- m4_pattern_forbid([^_?m4_])
+m4trace:configure.ac:22: -1- m4_pattern_forbid([^dnl$])
+m4trace:configure.ac:22: -1- m4_pattern_forbid([^_?AS_])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^SHELL$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PATH_SEPARATOR$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_URL$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^exec_prefix$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^prefix$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^program_transform_name$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^bindir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^sbindir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^libexecdir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^datarootdir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^datadir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^sysconfdir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^sharedstatedir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^localstatedir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^runstatedir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^includedir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^oldincludedir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^docdir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^infodir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^htmldir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^dvidir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^pdfdir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^psdir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^libdir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^localedir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^mandir$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^PACKAGE_URL$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^DEFS$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^ECHO_C$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^ECHO_N$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^ECHO_T$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^build_alias$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^host_alias$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^target_alias$])
+m4trace:configure.ac:24: -1- AC_CONFIG_MACRO_DIR([m4])
+m4trace:configure.ac:24: -1- AC_CONFIG_MACRO_DIR_TRACE([m4])
+m4trace:configure.ac:25: -1- AM_INIT_AUTOMAKE([no-define])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AM_[A-Z]+FLAGS$])
+m4trace:configure.ac:25: -1- AM_SET_CURRENT_AUTOMAKE_VERSION
+m4trace:configure.ac:25: -1- AM_AUTOMAKE_VERSION([1.16.5])
+m4trace:configure.ac:25: -1- _AM_AUTOCONF_VERSION([2.71])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^INSTALL_DATA$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^am__isrc$])
+m4trace:configure.ac:25: -1- _AM_SUBST_NOTMAKE([am__isrc])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^CYGPATH_W$])
+m4trace:configure.ac:25: -1- _AM_SET_OPTIONS([no-define])
+m4trace:configure.ac:25: -1- _AM_SET_OPTION([no-define])
+m4trace:configure.ac:25: -2- _AM_MANGLE_OPTION([no-define])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^PACKAGE$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^VERSION$])
+m4trace:configure.ac:25: -1- _AM_IF_OPTION([no-define], [], [AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE"], [Name of package])
+ AC_DEFINE_UNQUOTED([VERSION], ["$VERSION"], [Version number of package])])
+m4trace:configure.ac:25: -2- _AM_MANGLE_OPTION([no-define])
+m4trace:configure.ac:25: -1- AM_SANITY_CHECK
+m4trace:configure.ac:25: -1- AM_MISSING_PROG([ACLOCAL], [aclocal-${am__api_version}])
+m4trace:configure.ac:25: -1- AM_MISSING_HAS_RUN
+m4trace:configure.ac:25: -1- AM_AUX_DIR_EXPAND
+m4trace:configure.ac:25: -1- m4_pattern_allow([^ACLOCAL$])
+m4trace:configure.ac:25: -1- AM_MISSING_PROG([AUTOCONF], [autoconf])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AUTOCONF$])
+m4trace:configure.ac:25: -1- AM_MISSING_PROG([AUTOMAKE], [automake-${am__api_version}])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AUTOMAKE$])
+m4trace:configure.ac:25: -1- AM_MISSING_PROG([AUTOHEADER], [autoheader])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AUTOHEADER$])
+m4trace:configure.ac:25: -1- AM_MISSING_PROG([MAKEINFO], [makeinfo])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^MAKEINFO$])
+m4trace:configure.ac:25: -1- AM_PROG_INSTALL_SH
+m4trace:configure.ac:25: -1- m4_pattern_allow([^install_sh$])
+m4trace:configure.ac:25: -1- AM_PROG_INSTALL_STRIP
+m4trace:configure.ac:25: -1- m4_pattern_allow([^STRIP$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^INSTALL_STRIP_PROGRAM$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^MKDIR_P$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^mkdir_p$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AWK$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^SET_MAKE$])
+m4trace:configure.ac:25: -1- AM_SET_LEADING_DOT
+m4trace:configure.ac:25: -1- m4_pattern_allow([^am__leading_dot$])
+m4trace:configure.ac:25: -1- _AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])], [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+			     [_AM_PROG_TAR([v7])])])
+m4trace:configure.ac:25: -2- _AM_MANGLE_OPTION([tar-ustar])
+m4trace:configure.ac:25: -1- _AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])], [_AM_PROG_TAR([v7])])
+m4trace:configure.ac:25: -2- _AM_MANGLE_OPTION([tar-pax])
+m4trace:configure.ac:25: -1- _AM_PROG_TAR([v7])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AMTAR$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^am__tar$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^am__untar$])
+m4trace:configure.ac:25: -1- _AM_IF_OPTION([no-dependencies], [], [AC_PROVIDE_IFELSE([AC_PROG_CC],
+		  [_AM_DEPENDENCIES([CC])],
+		  [m4_define([AC_PROG_CC],
+			     m4_defn([AC_PROG_CC])[_AM_DEPENDENCIES([CC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+		  [_AM_DEPENDENCIES([CXX])],
+		  [m4_define([AC_PROG_CXX],
+			     m4_defn([AC_PROG_CXX])[_AM_DEPENDENCIES([CXX])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+		  [_AM_DEPENDENCIES([OBJC])],
+		  [m4_define([AC_PROG_OBJC],
+			     m4_defn([AC_PROG_OBJC])[_AM_DEPENDENCIES([OBJC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJCXX],
+		  [_AM_DEPENDENCIES([OBJCXX])],
+		  [m4_define([AC_PROG_OBJCXX],
+			     m4_defn([AC_PROG_OBJCXX])[_AM_DEPENDENCIES([OBJCXX])])])dnl
+])
+m4trace:configure.ac:25: -2- _AM_MANGLE_OPTION([no-dependencies])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^CTAGS$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^ETAGS$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^CSCOPE$])
+m4trace:configure.ac:25: -1- AM_SILENT_RULES
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AM_V$])
+m4trace:configure.ac:25: -1- AM_SUBST_NOTMAKE([AM_V])
+m4trace:configure.ac:25: -1- _AM_SUBST_NOTMAKE([AM_V])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AM_DEFAULT_V$])
+m4trace:configure.ac:25: -1- AM_SUBST_NOTMAKE([AM_DEFAULT_V])
+m4trace:configure.ac:25: -1- _AM_SUBST_NOTMAKE([AM_DEFAULT_V])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AM_DEFAULT_VERBOSITY$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^AM_BACKSLASH$])
+m4trace:configure.ac:25: -1- _AM_SUBST_NOTMAKE([AM_BACKSLASH])
+m4trace:configure.ac:27: -1- AM_MAINTAINER_MODE
+m4trace:configure.ac:27: -1- AM_CONDITIONAL([MAINTAINER_MODE], [test $USE_MAINTAINER_MODE = yes])
+m4trace:configure.ac:27: -1- m4_pattern_allow([^MAINTAINER_MODE_TRUE$])
+m4trace:configure.ac:27: -1- m4_pattern_allow([^MAINTAINER_MODE_FALSE$])
+m4trace:configure.ac:27: -1- _AM_SUBST_NOTMAKE([MAINTAINER_MODE_TRUE])
+m4trace:configure.ac:27: -1- _AM_SUBST_NOTMAKE([MAINTAINER_MODE_FALSE])
+m4trace:configure.ac:27: -1- m4_pattern_allow([^MAINT$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^CFLAGS$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^ac_ct_CC$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^EXEEXT$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^OBJEXT$])
+m4trace:configure.ac:32: -1- _AM_PROG_CC_C_O
+m4trace:configure.ac:32: -1- AM_RUN_LOG([$CC -c conftest.$ac_ext -o conftest2.$ac_objext])
+m4trace:configure.ac:32: -1- _AM_DEPENDENCIES([CC])
+m4trace:configure.ac:32: -1- AM_SET_DEPDIR
+m4trace:configure.ac:32: -1- m4_pattern_allow([^DEPDIR$])
+m4trace:configure.ac:32: -1- AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:32: -1- AM_MAKE_INCLUDE
+m4trace:configure.ac:32: -1- AM_RUN_LOG([${MAKE-make} -f confmf.$s && cat confinc.out])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^am__include$])
+m4trace:configure.ac:32: -1- AM_DEP_TRACK
+m4trace:configure.ac:32: -1- AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^AMDEP_TRUE$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^AMDEP_FALSE$])
+m4trace:configure.ac:32: -1- _AM_SUBST_NOTMAKE([AMDEP_TRUE])
+m4trace:configure.ac:32: -1- _AM_SUBST_NOTMAKE([AMDEP_FALSE])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^AMDEPBACKSLASH$])
+m4trace:configure.ac:32: -1- _AM_SUBST_NOTMAKE([AMDEPBACKSLASH])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^am__nodep$])
+m4trace:configure.ac:32: -1- _AM_SUBST_NOTMAKE([am__nodep])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^CCDEPMODE$])
+m4trace:configure.ac:32: -1- AM_CONDITIONAL([am__fastdepCC], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_CC_dependencies_compiler_type" = gcc3])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^am__fastdepCC_TRUE$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^am__fastdepCC_FALSE$])
+m4trace:configure.ac:32: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_TRUE])
+m4trace:configure.ac:32: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_FALSE])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^CXX$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^CXXFLAGS$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^CXX$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^ac_ct_CXX$])
+m4trace:configure.ac:33: -1- _AM_DEPENDENCIES([CXX])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^CXXDEPMODE$])
+m4trace:configure.ac:33: -1- AM_CONDITIONAL([am__fastdepCXX], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_CXX_dependencies_compiler_type" = gcc3])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^am__fastdepCXX_TRUE$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^am__fastdepCXX_FALSE$])
+m4trace:configure.ac:33: -1- _AM_SUBST_NOTMAKE([am__fastdepCXX_TRUE])
+m4trace:configure.ac:33: -1- _AM_SUBST_NOTMAKE([am__fastdepCXX_FALSE])
+m4trace:configure.ac:34: -1- AX_CXX_COMPILE_STDCXX_11([], [mandatory])
+m4trace:configure.ac:34: -1- AX_CXX_COMPILE_STDCXX([11], [], [mandatory])
+m4trace:configure.ac:34: -1- m4_pattern_allow([^HAVE_CXX11$])
+m4trace:configure.ac:34: -1- m4_pattern_allow([^HAVE_CXX11$])
+m4trace:configure.ac:36: -1- m4_pattern_allow([^RANLIB$])
+m4trace:configure.ac:37: -1- m4_pattern_allow([^SED$])
+m4trace:configure.ac:38: -1- m4_pattern_allow([^GREP$])
+m4trace:configure.ac:39: -1- m4_pattern_allow([^MAKE$])
+m4trace:configure.ac:40: -1- m4_pattern_allow([^AR$])
+m4trace:configure.ac:41: -1- m4_pattern_allow([^GZIP$])
+m4trace:configure.ac:42: -1- m4_pattern_allow([^GCONFIG_HAVE_DOXYGEN$])
+m4trace:configure.ac:43: -1- m4_pattern_allow([^GCONFIG_HAVE_MAN2HTML$])
+m4trace:configure.ac:44: -1- GCONFIG_FN_PROG_WINDRES
+m4trace:configure.ac:44: -1- m4_pattern_allow([^GCONFIG_WINDRES$])
+m4trace:configure.ac:45: -1- GCONFIG_FN_PROG_WINDMC
+m4trace:configure.ac:45: -1- m4_pattern_allow([^GCONFIG_WINDMC$])
+m4trace:configure.ac:50: -1- GCONFIG_FN_SEARCHLIBS_NAMESERVICE
+m4trace:configure.ac:51: -1- GCONFIG_FN_SEARCHLIBS_SOCKET
+m4trace:configure.ac:56: -1- GCONFIG_FN_CHECK_HEADERS
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_TYPES_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_TYPES_H$])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_stdio_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" stdio.h ]AS_TR_SH([stdio.h]) AS_TR_CPP([HAVE_stdio.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_stdlib_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" stdlib.h ]AS_TR_SH([stdlib.h]) AS_TR_CPP([HAVE_stdlib.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_string_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" string.h ]AS_TR_SH([string.h]) AS_TR_CPP([HAVE_string.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_inttypes_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" inttypes.h ]AS_TR_SH([inttypes.h]) AS_TR_CPP([HAVE_inttypes.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_stdint_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" stdint.h ]AS_TR_SH([stdint.h]) AS_TR_CPP([HAVE_stdint.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_strings_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" strings.h ]AS_TR_SH([strings.h]) AS_TR_CPP([HAVE_strings.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_sys_stat_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" sys/stat.h ]AS_TR_SH([sys/stat.h]) AS_TR_CPP([HAVE_sys/stat.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_sys_types_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" sys/types.h ]AS_TR_SH([sys/types.h]) AS_TR_CPP([HAVE_sys/types.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- AC_DEFUN([_AC_Header_unistd_h], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" unistd.h ]AS_TR_SH([unistd.h]) AS_TR_CPP([HAVE_unistd.h])["])])_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])
+m4trace:configure.ac:56: -1- m4_pattern_allow([^STDC_HEADERS$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_STAT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_STAT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_WAIT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_WAIT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_MMAN_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_MMAN_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_SELECT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_SELECT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_SOCKET_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_SOCKET_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_UTSNAME_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_SYS_UTSNAME_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_NETDB_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_NETDB_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_NETINET_IN_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_NETINET_IN_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_NET_IF_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_NET_IF_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_ARPA_INET_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_ARPA_INET_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_STDINT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_STDINT_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_INTTYPES_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_INTTYPES_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_UNISTD_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_UNISTD_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_ERRNO_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_ERRNO_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_IPHLPAPI_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_IPHLPAPI_H$])
+m4trace:configure.ac:56: -1- m4_pattern_allow([^CXXCPP$])
+m4trace:configure.ac:56: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:56: -1- m4_pattern_allow([^CXXCPP$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_VERSIONHELPERS_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_VERSIONHELPERS_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_PWD_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_PWD_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_GRP_H$])
+m4trace:configure.ac:56: -2- m4_pattern_allow([^GCONFIG_HAVE_GRP_H$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_CHECK_TYPES
+m4trace:configure.ac:57: -1- GCONFIG_FN_TYPE_SOCKLEN_T
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_SOCKLEN_T$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_SOCKLEN_T$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_TYPE_ERRNO_T
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_ERRNO_T$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_ERRNO_T$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_TYPE_SSIZE_T
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_SSIZE_T$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_SSIZE_T$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_TYPE_UINTPTR_T
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_UINTPTR_T$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_UINTPTR_T$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_TYPE_INT64
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_INT64$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_INT64$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_TYPE_INT32
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_INT32$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_INT32$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_TYPE_INT16
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_INT16$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_INT16$])
+m4trace:configure.ac:57: -2- m4_pattern_allow([^GCONFIG_HAVE_PID_T$])
+m4trace:configure.ac:57: -2- m4_pattern_allow([^GCONFIG_HAVE_PID_T$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^HAVE_PID_T$])
+m4trace:configure.ac:57: -2- m4_pattern_allow([^GCONFIG_HAVE_UID_T$])
+m4trace:configure.ac:57: -2- m4_pattern_allow([^GCONFIG_HAVE_UID_T$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^HAVE_UID_T$])
+m4trace:configure.ac:57: -2- m4_pattern_allow([^GCONFIG_HAVE_GID_T$])
+m4trace:configure.ac:57: -2- m4_pattern_allow([^GCONFIG_HAVE_GID_T$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^HAVE_GID_T$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_STATBUF_TIMESPEC
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_STATBUF_TIMESPEC$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_STATBUF_TIMESPEC$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_STATBUF_NSEC
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_STATBUF_NSEC$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_STATBUF_NSEC$])
+m4trace:configure.ac:57: -1- GCONFIG_FN_IOVEC_SIMPLE
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_IOVEC_SIMPLE$])
+m4trace:configure.ac:57: -1- m4_pattern_allow([^GCONFIG_HAVE_IOVEC_SIMPLE$])
+m4trace:configure.ac:58: -1- GCONFIG_FN_CHECK_CXX
+m4trace:configure.ac:58: -1- GCONFIG_FN_CXX_ALIGNMENT
+m4trace:configure.ac:58: -1- m4_pattern_allow([^GCONFIG_HAVE_CXX_ALIGNMENT$])
+m4trace:configure.ac:58: -1- m4_pattern_allow([^GCONFIG_HAVE_CXX_ALIGNMENT$])
+m4trace:configure.ac:58: -1- GCONFIG_FN_CXX_MAKE_UNIQUE
+m4trace:configure.ac:58: -1- m4_pattern_allow([^GCONFIG_HAVE_CXX_MAKE_UNIQUE$])
+m4trace:configure.ac:58: -1- m4_pattern_allow([^GCONFIG_HAVE_CXX_MAKE_UNIQUE$])
+m4trace:configure.ac:58: -1- GCONFIG_FN_CXX_STD_THREAD
+m4trace:configure.ac:58: -1- GCONFIG_FN_CXX_STD_THREAD_IMP([std::thread_asynchronous_script_execution])
+m4trace:configure.ac:58: -1- m4_pattern_allow([^GCONFIG_HAVE_CXX_STD_THREAD$])
+m4trace:configure.ac:58: -1- GCONFIG_FN_CXX_STD_THREAD_PTHREAD
+m4trace:configure.ac:58: -1- m4_pattern_allow([^GCONFIG_HAVE_CXX_STD_THREAD$])
+m4trace:configure.ac:58: -1- m4_pattern_allow([^GCONFIG_HAVE_CXX_STD_THREAD$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_CHECK_NET
+m4trace:configure.ac:59: -1- GCONFIG_FN_IPV6
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_IPV6$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_IPV6$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_SIN6_LEN
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_SIN6_LEN$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_SIN6_LEN$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_INET_NTOP
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_INET_NTOP$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_INET_NTOP$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_INET_PTON
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_INET_PTON$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_INET_PTON$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_EPOLL
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_EPOLL$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_EPOLL$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_RTNETLINK
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_RTNETLINK$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_RTNETLINK$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_NETROUTE
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_NETROUTE$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_NETROUTE$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_IFNAMETOINDEX
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_IFNAMETOINDEX$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_IFNAMETOINDEX$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_IFNAMETOLUID
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_IFNAMETOLUID$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_IFNAMETOLUID$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_GAISTRERROR
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_GAISTRERROR$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_GAISTRERROR$])
+m4trace:configure.ac:59: -1- GCONFIG_FN_UDS
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_UDS$])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^GCONFIG_HAVE_UDS$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_CHECK_FUNCTIONS
+m4trace:configure.ac:60: -1- GCONFIG_FN_GETPWNAM
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETPWNAM$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETPWNAM$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_GETPWNAM_R
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETPWNAM_R$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETPWNAM_R$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_GETGRNAM
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETGRNAM$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETGRNAM$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_GETGRNAM_R
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETGRNAM_R$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETGRNAM_R$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_GETTEXT
+m4trace:configure.ac:60: -1- GCONFIG_FN_GMTIME_R
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GMTIME_R$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GMTIME_R$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_GMTIME_S
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GMTIME_S$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GMTIME_S$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_LOCALTIME_R
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_LOCALTIME_R$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_LOCALTIME_R$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_LOCALTIME_S
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_LOCALTIME_S$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_LOCALTIME_S$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_STRNCPY_S
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_STRNCPY_S$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_STRNCPY_S$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_GETENV_S
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETENV_S$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_GETENV_S$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_PUTENV_S
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_PUTENV_S$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_PUTENV_S$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_FSOPEN
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_FSOPEN$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_FSOPEN$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_SOPEN
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SOPEN$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SOPEN$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_SOPEN_S
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SOPEN_S$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SOPEN_S$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_EXTENDED_OPEN
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_EXTENDED_OPEN$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_EXTENDED_OPEN$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_READLINK
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_READLINK$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_READLINK$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_PROC_PIDPATH
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_PROC_PIDPATH$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_PROC_PIDPATH$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_SETPGRP_BSD
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SETPGRP_BSD$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SETPGRP_BSD$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_SETGROUPS
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SETGROUPS$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SETGROUPS$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_EXECVPE
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_EXECVPE$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_EXECVPE$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_SIGPROCMASK
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SIGPROCMASK$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_SIGPROCMASK$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_PTHREAD_SIGMASK
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_PTHREAD_SIGMASK$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_PTHREAD_SIGMASK$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_WINDOWS_CREATE_WAITABLE_TIMER_EX
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_CREATE_WAITABLE_TIMER_EX$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_CREATE_WAITABLE_TIMER_EX$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_WINDOWS_CREATE_EVENT_EX
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_CREATE_EVENT_EX$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_CREATE_EVENT_EX$])
+m4trace:configure.ac:60: -1- GCONFIG_FN_WINDOWS_INIT_COMMON_CONTROLS_EX
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_INIT_COMMON_CONTROLS_EX$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^GCONFIG_HAVE_WINDOWS_INIT_COMMON_CONTROLS_EX$])
+m4trace:configure.ac:65: -1- PKG_PROG_PKG_CONFIG([0.9.0])
+m4trace:configure.ac:65: -1- m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+m4trace:configure.ac:65: -1- m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
+m4trace:configure.ac:65: -1- m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
+m4trace:configure.ac:65: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:65: -1- m4_pattern_allow([^PKG_CONFIG_PATH$])
+m4trace:configure.ac:65: -1- m4_pattern_allow([^PKG_CONFIG_LIBDIR$])
+m4trace:configure.ac:65: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:69: -1- GCONFIG_FN_QT
+m4trace:configure.ac:69: -1- PKG_CHECK_MODULES([QT], [Qt5Widgets > 5], [
+			gconfig_pkgconfig_qt=yes
+		], [
+			gconfig_pkgconfig_qt=no
+			AC_MSG_NOTICE([no QT 5 pkg-config])
+		
+	])
+m4trace:configure.ac:69: -1- m4_pattern_allow([^QT_CFLAGS$])
+m4trace:configure.ac:69: -1- m4_pattern_allow([^QT_LIBS$])
+m4trace:configure.ac:69: -1- PKG_CHECK_EXISTS([Qt5Widgets > 5], [pkg_cv_[]QT_CFLAGS=`$PKG_CONFIG --[]cflags "Qt5Widgets > 5" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:69: -1- PKG_CHECK_EXISTS([Qt5Widgets > 5], [pkg_cv_[]QT_LIBS=`$PKG_CONFIG --[]libs "Qt5Widgets > 5" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:69: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:69: -1- m4_pattern_allow([^QT_MOC$])
+m4trace:configure.ac:69: -1- m4_pattern_allow([^QT_MOC$])
+m4trace:configure.ac:69: -1- m4_pattern_allow([^QT_LRELEASE$])
+m4trace:configure.ac:70: -1- GCONFIG_FN_QT_BUILD
+m4trace:configure.ac:71: -1- GCONFIG_FN_TLS_OPENSSL
+m4trace:configure.ac:71: -1- m4_pattern_allow([^GCONFIG_HAVE_OPENSSL$])
+m4trace:configure.ac:71: -1- m4_pattern_allow([^GCONFIG_HAVE_OPENSSL$])
+m4trace:configure.ac:71: -1- m4_pattern_allow([^GCONFIG_HAVE_OPENSSL_TLS_METHOD$])
+m4trace:configure.ac:71: -1- m4_pattern_allow([^GCONFIG_HAVE_OPENSSL_TLS_METHOD$])
+m4trace:configure.ac:71: -1- m4_pattern_allow([^GCONFIG_HAVE_OPENSSL_MIN_MAX$])
+m4trace:configure.ac:71: -1- m4_pattern_allow([^GCONFIG_HAVE_OPENSSL_MIN_MAX$])
+m4trace:configure.ac:72: -1- GCONFIG_FN_TLS_MBEDTLS
+m4trace:configure.ac:72: -1- m4_pattern_allow([^GCONFIG_HAVE_MBEDTLS$])
+m4trace:configure.ac:72: -1- m4_pattern_allow([^GCONFIG_HAVE_MBEDTLS$])
+m4trace:configure.ac:72: -1- m4_pattern_allow([^GCONFIG_HAVE_MBEDTLS_NET_H$])
+m4trace:configure.ac:72: -1- m4_pattern_allow([^GCONFIG_HAVE_MBEDTLS_NET_H$])
+m4trace:configure.ac:77: -1- GCONFIG_FN_ENABLE_BSD
+m4trace:configure.ac:77: -1- AM_CONDITIONAL([GCONFIG_BSD], [test "$enable_bsd" = "yes" -o "`uname`" = "NetBSD" -o "`uname`" = "FreeBSD" -o "`uname`" = "OpenBSD" ])
+m4trace:configure.ac:77: -1- m4_pattern_allow([^GCONFIG_BSD_TRUE$])
+m4trace:configure.ac:77: -1- m4_pattern_allow([^GCONFIG_BSD_FALSE$])
+m4trace:configure.ac:77: -1- _AM_SUBST_NOTMAKE([GCONFIG_BSD_TRUE])
+m4trace:configure.ac:77: -1- _AM_SUBST_NOTMAKE([GCONFIG_BSD_FALSE])
+m4trace:configure.ac:79: -1- GCONFIG_FN_ENABLE_DEBUG
+m4trace:configure.ac:79: -1- m4_pattern_allow([^_DEBUG$])
+m4trace:configure.ac:81: -1- GCONFIG_FN_ENABLE_EPOLL
+m4trace:configure.ac:81: -1- m4_pattern_allow([^GCONFIG_ENABLE_EPOLL$])
+m4trace:configure.ac:81: -1- m4_pattern_allow([^GCONFIG_ENABLE_EPOLL$])
+m4trace:configure.ac:81: -1- AM_CONDITIONAL([GCONFIG_EPOLL], [test "$gconfig_use_epoll" = "yes"])
+m4trace:configure.ac:81: -1- m4_pattern_allow([^GCONFIG_EPOLL_TRUE$])
+m4trace:configure.ac:81: -1- m4_pattern_allow([^GCONFIG_EPOLL_FALSE$])
+m4trace:configure.ac:81: -1- _AM_SUBST_NOTMAKE([GCONFIG_EPOLL_TRUE])
+m4trace:configure.ac:81: -1- _AM_SUBST_NOTMAKE([GCONFIG_EPOLL_FALSE])
+m4trace:configure.ac:83: -1- GCONFIG_FN_ENABLE_GUI
+m4trace:configure.ac:83: -1- m4_pattern_allow([^GCONFIG_QT_LIBS$])
+m4trace:configure.ac:83: -1- m4_pattern_allow([^GCONFIG_QT_CFLAGS$])
+m4trace:configure.ac:83: -1- m4_pattern_allow([^GCONFIG_QT_MOC$])
+m4trace:configure.ac:83: -1- AM_CONDITIONAL([GCONFIG_GUI], [test "$gconfig_gui" = "yes"])
+m4trace:configure.ac:83: -1- m4_pattern_allow([^GCONFIG_GUI_TRUE$])
+m4trace:configure.ac:83: -1- m4_pattern_allow([^GCONFIG_GUI_FALSE$])
+m4trace:configure.ac:83: -1- _AM_SUBST_NOTMAKE([GCONFIG_GUI_TRUE])
+m4trace:configure.ac:83: -1- _AM_SUBST_NOTMAKE([GCONFIG_GUI_FALSE])
+m4trace:configure.ac:85: -1- GCONFIG_FN_ENABLE_INSTALL_HOOK
+m4trace:configure.ac:85: -1- AM_CONDITIONAL([GCONFIG_INSTALL_HOOK], [test "$enable_install_hook" != "no"])
+m4trace:configure.ac:85: -1- m4_pattern_allow([^GCONFIG_INSTALL_HOOK_TRUE$])
+m4trace:configure.ac:85: -1- m4_pattern_allow([^GCONFIG_INSTALL_HOOK_FALSE$])
+m4trace:configure.ac:85: -1- _AM_SUBST_NOTMAKE([GCONFIG_INSTALL_HOOK_TRUE])
+m4trace:configure.ac:85: -1- _AM_SUBST_NOTMAKE([GCONFIG_INSTALL_HOOK_FALSE])
+m4trace:configure.ac:87: -1- GCONFIG_FN_ENABLE_INTERFACE_NAMES
+m4trace:configure.ac:87: -1- AM_CONDITIONAL([GCONFIG_INTERFACE_NAMES], [test "$enable_interface_names" != "no"])
+m4trace:configure.ac:87: -1- m4_pattern_allow([^GCONFIG_INTERFACE_NAMES_TRUE$])
+m4trace:configure.ac:87: -1- m4_pattern_allow([^GCONFIG_INTERFACE_NAMES_FALSE$])
+m4trace:configure.ac:87: -1- _AM_SUBST_NOTMAKE([GCONFIG_INTERFACE_NAMES_TRUE])
+m4trace:configure.ac:87: -1- _AM_SUBST_NOTMAKE([GCONFIG_INTERFACE_NAMES_FALSE])
+m4trace:configure.ac:89: -1- GCONFIG_FN_ENABLE_IPV6
+m4trace:configure.ac:89: -1- m4_pattern_allow([^GCONFIG_ENABLE_IPV6$])
+m4trace:configure.ac:89: -1- m4_pattern_allow([^GCONFIG_ENABLE_IPV6$])
+m4trace:configure.ac:89: -1- AM_CONDITIONAL([GCONFIG_IPV6], [test "$gconfig_use_ipv6" = "yes"])
+m4trace:configure.ac:89: -1- m4_pattern_allow([^GCONFIG_IPV6_TRUE$])
+m4trace:configure.ac:89: -1- m4_pattern_allow([^GCONFIG_IPV6_FALSE$])
+m4trace:configure.ac:89: -1- _AM_SUBST_NOTMAKE([GCONFIG_IPV6_TRUE])
+m4trace:configure.ac:89: -1- _AM_SUBST_NOTMAKE([GCONFIG_IPV6_FALSE])
+m4trace:configure.ac:91: -1- GCONFIG_FN_ENABLE_MAC
+m4trace:configure.ac:91: -1- AM_CONDITIONAL([GCONFIG_MAC], [test "$enable_mac" = "yes" -o "`uname`" = "Darwin"])
+m4trace:configure.ac:91: -1- m4_pattern_allow([^GCONFIG_MAC_TRUE$])
+m4trace:configure.ac:91: -1- m4_pattern_allow([^GCONFIG_MAC_FALSE$])
+m4trace:configure.ac:91: -1- _AM_SUBST_NOTMAKE([GCONFIG_MAC_TRUE])
+m4trace:configure.ac:91: -1- _AM_SUBST_NOTMAKE([GCONFIG_MAC_FALSE])
+m4trace:configure.ac:93: -1- GCONFIG_FN_ENABLE_STD_THREAD
+m4trace:configure.ac:93: -1- m4_pattern_allow([^GCONFIG_ENABLE_STD_THREAD$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^GCONFIG_ENABLE_STD_THREAD$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^GCONFIG_ENABLE_STD_THREAD$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^GCONFIG_ENABLE_STD_THREAD$])
+m4trace:configure.ac:95: -1- GCONFIG_FN_ENABLE_TESTING
+m4trace:configure.ac:95: -1- AM_CONDITIONAL([GCONFIG_TESTING], [test "$enable_testing" != "no"])
+m4trace:configure.ac:95: -1- m4_pattern_allow([^GCONFIG_TESTING_TRUE$])
+m4trace:configure.ac:95: -1- m4_pattern_allow([^GCONFIG_TESTING_FALSE$])
+m4trace:configure.ac:95: -1- _AM_SUBST_NOTMAKE([GCONFIG_TESTING_TRUE])
+m4trace:configure.ac:95: -1- _AM_SUBST_NOTMAKE([GCONFIG_TESTING_FALSE])
+m4trace:configure.ac:97: -1- GCONFIG_FN_ENABLE_VERBOSE
+m4trace:configure.ac:97: -1- m4_pattern_allow([^GCONFIG_NO_LOG$])
+m4trace:configure.ac:99: -1- GCONFIG_FN_ENABLE_WINDOWS
+m4trace:configure.ac:99: -1- m4_pattern_allow([^GCONFIG_WINDOWS$])
+m4trace:configure.ac:99: -1- m4_pattern_allow([^GCONFIG_MINGW$])
+m4trace:configure.ac:99: -1- m4_pattern_allow([^GCONFIG_WINDOWS$])
+m4trace:configure.ac:99: -1- m4_pattern_allow([^GCONFIG_MINGW$])
+m4trace:configure.ac:99: -1- AM_CONDITIONAL([GCONFIG_WINDOWS], [test "$enable_windows" = "yes" -o "`uname -o 2>/dev/null`" = "Msys"])
+m4trace:configure.ac:99: -1- m4_pattern_allow([^GCONFIG_WINDOWS_TRUE$])
+m4trace:configure.ac:99: -1- m4_pattern_allow([^GCONFIG_WINDOWS_FALSE$])
+m4trace:configure.ac:99: -1- _AM_SUBST_NOTMAKE([GCONFIG_WINDOWS_TRUE])
+m4trace:configure.ac:99: -1- _AM_SUBST_NOTMAKE([GCONFIG_WINDOWS_FALSE])
+m4trace:configure.ac:104: -1- GCONFIG_FN_WITH_DOXYGEN
+m4trace:configure.ac:104: -1- m4_pattern_allow([^GCONFIG_HAVE_DOXYGEN$])
+m4trace:configure.ac:106: -1- GCONFIG_FN_WITH_GETTEXT
+m4trace:configure.ac:106: -1- m4_pattern_allow([^GCONFIG_HAVE_GETTEXT$])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^GCONFIG_HAVE_GETTEXT$])
+m4trace:configure.ac:106: -1- AM_CONDITIONAL([GCONFIG_GETTEXT], [test "$gconfig_cv_gettext" = "yes"])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^GCONFIG_GETTEXT_TRUE$])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^GCONFIG_GETTEXT_FALSE$])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([GCONFIG_GETTEXT_TRUE])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([GCONFIG_GETTEXT_FALSE])
+m4trace:configure.ac:108: -1- GCONFIG_FN_WITH_MAN2HTML
+m4trace:configure.ac:108: -1- m4_pattern_allow([^GCONFIG_HAVE_MAN2HTML$])
+m4trace:configure.ac:111: -1- GCONFIG_FN_TLS
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_LIBS$])
+m4trace:configure.ac:111: -1- AM_CONDITIONAL([GCONFIG_TLS_USE_BOTH], [test "$gconfig_ssl_use_both" = "yes"])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_BOTH_TRUE$])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_BOTH_FALSE$])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_BOTH_TRUE])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_BOTH_FALSE])
+m4trace:configure.ac:111: -1- AM_CONDITIONAL([GCONFIG_TLS_USE_OPENSSL], [test "$gconfig_ssl_use_openssl_only" = "yes"])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_OPENSSL_TRUE$])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_OPENSSL_FALSE$])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_OPENSSL_TRUE])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_OPENSSL_FALSE])
+m4trace:configure.ac:111: -1- AM_CONDITIONAL([GCONFIG_TLS_USE_MBEDTLS], [test "$gconfig_ssl_use_mbedtls_only" = "yes"])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_MBEDTLS_TRUE$])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_MBEDTLS_FALSE$])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_MBEDTLS_TRUE])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_MBEDTLS_FALSE])
+m4trace:configure.ac:111: -1- AM_CONDITIONAL([GCONFIG_TLS_USE_NONE], [test "$gconfig_ssl_use_none" = "yes"])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_NONE_TRUE$])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^GCONFIG_TLS_USE_NONE_FALSE$])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_NONE_TRUE])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([GCONFIG_TLS_USE_NONE_FALSE])
+m4trace:configure.ac:113: -1- GCONFIG_FN_WITH_PAM
+m4trace:configure.ac:113: -1- GCONFIG_FN_PAM
+m4trace:configure.ac:113: -1- GCONFIG_FN_PAM_IN_SECURITY
+m4trace:configure.ac:113: -1- GCONFIG_FN_PAM_IN_PAM
+m4trace:configure.ac:113: -1- GCONFIG_FN_PAM_IN_INCLUDE
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM_IN_SECURITY$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM_IN_SECURITY$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM_IN_PAM$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM_IN_PAM$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM_IN_INCLUDE$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM_IN_INCLUDE$])
+m4trace:configure.ac:113: -1- GCONFIG_FN_PAM_CONST
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_PAM_CONST$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_PAM_CONST$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_HAVE_PAM$])
+m4trace:configure.ac:113: -1- AM_CONDITIONAL([GCONFIG_PAM], [test "$gconfig_use_pam" = "yes"])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_PAM_TRUE$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^GCONFIG_PAM_FALSE$])
+m4trace:configure.ac:113: -1- _AM_SUBST_NOTMAKE([GCONFIG_PAM_TRUE])
+m4trace:configure.ac:113: -1- _AM_SUBST_NOTMAKE([GCONFIG_PAM_FALSE])
+m4trace:configure.ac:115: -1- GCONFIG_FN_WITH_UDS
+m4trace:configure.ac:115: -1- AM_CONDITIONAL([GCONFIG_UDS], [false])
+m4trace:configure.ac:115: -1- m4_pattern_allow([^GCONFIG_UDS_TRUE$])
+m4trace:configure.ac:115: -1- m4_pattern_allow([^GCONFIG_UDS_FALSE$])
+m4trace:configure.ac:115: -1- _AM_SUBST_NOTMAKE([GCONFIG_UDS_TRUE])
+m4trace:configure.ac:115: -1- _AM_SUBST_NOTMAKE([GCONFIG_UDS_FALSE])
+m4trace:configure.ac:115: -1- AM_CONDITIONAL([GCONFIG_UDS], [true])
+m4trace:configure.ac:115: -1- m4_pattern_allow([^GCONFIG_UDS_TRUE$])
+m4trace:configure.ac:115: -1- m4_pattern_allow([^GCONFIG_UDS_FALSE$])
+m4trace:configure.ac:115: -1- _AM_SUBST_NOTMAKE([GCONFIG_UDS_TRUE])
+m4trace:configure.ac:115: -1- _AM_SUBST_NOTMAKE([GCONFIG_UDS_FALSE])
+m4trace:configure.ac:120: -1- GCONFIG_FN_SET_DIRECTORIES_E
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_docdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_initdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_bsdinitdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_icondir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_trdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_spooldir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_examplesdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_libexecdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_pamdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_sysconfdir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_rundir$])
+m4trace:configure.ac:120: -1- m4_pattern_allow([^e_systemddir$])
+m4trace:configure.ac:125: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:125: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:125: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:125: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:125: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:125: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:125: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:125: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
+m4trace:configure.ac:125: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:125: -1- AM_RUN_LOG([cd "$am_dirpart" \
+      && sed -e '/# am--include-marker/d' "$am_filepart" \
+        | $MAKE -f - am--depfiles])
+m4trace:configure.ac:129: -1- GCONFIG_FN_WARNINGS
