@@ -43,7 +43,7 @@
 //  * openssl smtp client to gmail
 //     $ openssl s_client -tls1 -msg -debug -starttls smtp -crlf -connect smtp.gmail.com:587
 //  * certificate
-//     $ openssl req -x509 -nodes -subj /CN=example.com -newkey rsa:1024 -keyout example.pem -out example.pem
+//     $ openssl req -x509 -noenc -subj /CN=example.com -newkey rsa:1024 -keyout example.pem -out example.pem
 //     $ cp example.pem /etc/ssl/certs/
 //     $ cd /etc/ssl/certs && ln -s example.pem `openssl x509 -noout -hash -in example.pem`.0
 //  * openssl server (without smtp)

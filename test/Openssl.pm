@@ -150,7 +150,7 @@ sub selfcert
 	my $crt_file = $this->{m_fs}->outfile( "$basename.crt" ) ;
 	my $key_file = $this->{m_fs}->outfile( "$basename.key" ) ;
 	my $days = 30000 ; # expiry time in days
-	$this->_run( "$openssl req -x509 -newkey rsa:2048 -days $days -subj /CN=$cname -nodes -out $crt_file -keyout $key_file" ) ;
+	$this->_run( "$openssl req -x509 -newkey rsa:2048 -days $days -subj /CN=$cname -noenc -out $crt_file -keyout $key_file" ) ;
 	$this->_check( $crt_file , $key_file ) ;
 }
 

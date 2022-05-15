@@ -773,7 +773,7 @@ key.
 This OpenSSL command can be used to create a self-signed certificate file
 suitable for testing:
 
-        $ openssl req -x509 -nodes -subj "/CN=$USER" -newkey rsa:2048 -keyout emailrelay.pem  -out emailrelay.pem
+        $ openssl req -x509 -noenc -subj "/CN=$USER" -newkey rsa:2048 -keyout emailrelay.pem  -out emailrelay.pem
 
 TLS performs encryption to prevent eavesdropping, but it does not necessarily
 do authentication to prevent man-in-the-middle attacks. For full TLS

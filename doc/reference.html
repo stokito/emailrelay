@@ -902,7 +902,7 @@ server plain carol my+20password
     </p>
 
       <div class="div-pre">
-       <pre>$ openssl req -x509 -nodes -subj "/CN=$USER" -newkey rsa:2048 -keyout emailrelay.pem  -out emailrelay.pem
+       <pre>$ openssl req -x509 -noenc -subj "/CN=$USER" -newkey rsa:2048 -keyout emailrelay.pem  -out emailrelay.pem
 </pre>
       </div><!-- div-pre -->
     <p>
