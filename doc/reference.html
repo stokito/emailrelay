@@ -137,7 +137,9 @@
        Enables verification of the remote SMTP server's certificate against any of
        the trusted CA certificates in the specified file or directory. In many use
        cases this should be a file containing just your self-signed root
-       certificate.
+       certificate. Use <em>&lt;default&gt;</em> to verify against the system's
+       CA database. When empty ask for certs but not verify. Use <em>&lt;none&gt;</em>
+       to skip certs asking.
       </dd>
      <dt>--client-tls-verify-name &lt;cname&gt;</dt>
       <dd>
@@ -411,7 +413,9 @@
        Enables verification of remote SMTP and POP clients' certificates against any
        of the trusted CA certificates in the specified file or directory. In many
        use cases this should be a file containing just your self-signed root
-       certificate.
+       certificate. Use <em>&lt;default&gt;</em> to verify against the system's
+       CA database. When empty ask for certs but not verify. Use <em>&lt;none&gt;</em>
+       to skip certs asking.
       </dd>
      <dt>--size &lt;bytes&gt; (-M)</dt>
       <dd>
