@@ -448,7 +448,7 @@ G::Options Main::Options::spec( bool is_windows )
 			M::zero , "" , 3 ,
 			t_logging|t_process } , '!' ) ;
 				// Causes the standard error stream to be closed soon after start-up.
-				// This is useful when operating as a backgroud daemon and it is
+				// This is useful when operating as a background daemon and it is
 				// therefore implied by --as-server and --as-proxy.
 
 		opt.add( { 'a' , "admin" ,
@@ -638,7 +638,7 @@ G::Options Main::Options::spec( bool is_windows )
 				//example: /run/emailrelay/emailrelay.pid
 				//example: C:/ProgramData/E-MailRelay/pid.txt
 				// Causes the process-id to be written into the specified file when the
-				// program starts up, typically after it has become a backgroud daemon.
+				// program starts up, typically after it has become a background daemon.
 
 		opt.add( { 'O' , "poll" ,
 			txt("enables polling of the spool directory for messages to be forwarded with the specified period! "

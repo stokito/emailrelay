@@ -107,7 +107,7 @@ Enables verification of the remote SMTP server's certificate against any of the 
 Enables verification of the CNAME within the remote SMTP server's certificate.
 .TP
 .B \-e, --close-stderr
-Causes the standard error stream to be closed soon after start-up. This is useful when operating as a backgroud daemon and it is therefore implied by \fI--as-server\fR and \fI--as-proxy\fR.
+Causes the standard error stream to be closed soon after start-up. This is useful when operating as a background daemon and it is therefore implied by \fI--as-server\fR and \fI--as-proxy\fR.
 .TP
 .B \-U, --connection-timeout \fI<time>\fR
 Specifies a timeout (in seconds) for establishing a TCP connection to remote SMTP servers. The default is 40 seconds.
@@ -182,7 +182,7 @@ Disables listening for incoming SMTP connections.
 Disables logging to the syslog. Note that \fI--as-client\fR implies \fI--no-syslog\fR.
 .TP
 .B \-i, --pid-file \fI<pid-file>\fR
-Causes the process-id to be written into the specified file when the program starts up, typically after it has become a backgroud daemon.
+Causes the process-id to be written into the specified file when the program starts up, typically after it has become a background daemon.
 .TP
 .B \-O, --poll \fI<period>\fR
 Causes forwarding of spooled mail messages to happen at regular intervals (with the time given in seconds).

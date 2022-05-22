@@ -199,7 +199,7 @@
 # Format: close-stderr
 # Tags: logging process
 # Description: Causes the standard error stream to be closed soon after
-# start-up. This is useful when operating as a backgroud daemon and it is
+# start-up. This is useful when operating as a background daemon and it is
 # therefore implied by "--as-server" and "--as-proxy".
 #
 #close-stderr
@@ -424,7 +424,7 @@
 # Format: pid-file <pid-file>
 # Tags: process
 # Description: Causes the process-id to be written into the specified file
-# when the program starts up, typically after it has become a backgroud
+# when the program starts up, typically after it has become a background
 # daemon.
 #
 #pid-file /run/emailrelay/emailrelay.pid

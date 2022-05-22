@@ -136,7 +136,7 @@ where \<option\> is:
 *   --close-stderr (-e)
 
     Causes the standard error stream to be closed soon after start-up. This is
-    useful when operating as a backgroud daemon and it is therefore implied by
+    useful when operating as a background daemon and it is therefore implied by
     *--as-server* and *--as-proxy*.
 
 *   --connection-timeout \<time\> (-U)
@@ -290,7 +290,7 @@ where \<option\> is:
 *   --pid-file \<pid-file\> (-i)
 
     Causes the process-id to be written into the specified file when the program
-    starts up, typically after it has become a backgroud daemon.
+    starts up, typically after it has become a background daemon.
 
 *   --poll \<period\> (-O)
 
