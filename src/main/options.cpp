@@ -269,7 +269,7 @@ G::Options Main::Options::spec( bool is_windows )
 			t_smtp|t_server|t_tls } , '!' ) ;
 				//example: /etc/ssl/certs/ca-certificates.crt
 				//example: C:/ProgramData/E-MailRelay/ca-certificates.crt
-				// Enables verification of remote SMTP and POP clients' certificates
+				// Enables verification of remote SMTP and POP client's certificates
 				// against any of the trusted CA certificates in the specified file
 				// or directory. In many use cases this should be a file containing
 				// just your self-signed root certificate.

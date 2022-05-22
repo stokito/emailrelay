@@ -398,7 +398,7 @@ where \<option\> is:
 
 *   --server-tls-verify \<ca-list\>
 
-    Enables verification of remote SMTP and POP clients' certificates against any
+    Enables verification of remote SMTP and POP client's certificates against any
     of the trusted CA certificates in the specified file or directory. In many
     use cases this should be a file containing just your self-signed root
     certificate. Use <default> to verify against the system's CA database.
